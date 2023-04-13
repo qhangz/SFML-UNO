@@ -5,7 +5,7 @@
 #define MUSIC_X 1776
 #define MUSIC_Y 0
 //开始按钮坐标
-#define PLAY_X 868
+#define PLAY_X 875
 #define PLAY_Y 800
 //退出按钮坐标
 #define EXIT_X 1848
@@ -98,29 +98,16 @@ void UNO::InitialCard() {
 	std::cout << "游戏数据初始化已好" << std::endl;
 }
 
-//绘制发牌动画
-void UNO::drawdealCard() {
-
-}
-
-void UNO::startMusic() {
-
-}
-
-void UNO::stopMusic() {
-
-}
-
 void UNO::LoadMesiaData()
 {
-	if (!tBackground[0].loadFromFile("./data/bg_menu.jpg"))
+	if (!tBackground[0].loadFromFile("./data/images/bg_menu.jpg"))
 	{
 		std::cout << "No bg_menu image found." << std::endl;
 	}
 	sBackground[0].setTexture(tBackground[0]);
 	//sBackground[0].setScale(0.8f, 0.8f);//将背景图片等比缩小了80%
 
-	if (!tBackground[1].loadFromFile("./data/bg_game.jpg"))
+	if (!tBackground[1].loadFromFile("./data/images/bg_game.jpg"))
 	{
 		std::cout << "No bg_game image found." << std::endl;
 	}
@@ -128,13 +115,13 @@ void UNO::LoadMesiaData()
 	//sBackground[1].setScale(0.8f, 0.8f);//将背景图片等比缩小了80%
 
 	//加载开始按钮
-	if (!tMusicBtnNormal.loadFromFile("./data/but_play.png"))
+	if (!tMusicBtnNormal.loadFromFile("./data/images/but_play.png"))
 	{
 		std::cout << "No but_play image found." << std::endl;
 	}
 	sMusicBtnNormal.setTexture(tMusic1BtnNormal);
 	//startBtn.setScale(0.8f, 0.8f);//将背景图片等比缩小了80%
-	if (!tStartBtnNormal.loadFromFile("./data/but_play.png"))
+	if (!tStartBtnNormal.loadFromFile("./data/images/but_play.png"))
 	{
 		std::cout << "No but_play image found." << std::endl;
 	}
@@ -143,12 +130,12 @@ void UNO::LoadMesiaData()
 
 	//音量键开关
 
-	if (!tMusic1BtnNormal.loadFromFile("./data/audio_icon.png", IntRect(0, 0, 71, 71)))
+	if (!tMusic1BtnNormal.loadFromFile("./data/images/audio_icon.png", IntRect(0, 0, 71, 71)))
 	{
 		std::cout << "No audio_icon image found." << std::endl;
 
 	}
-	if (!tMusic2BtnNormal.loadFromFile("./data/audio_icon.png", IntRect(71, 0, 71, 71)))
+	if (!tMusic2BtnNormal.loadFromFile("./data/images/audio_icon.png", IntRect(71, 0, 71, 71)))
 	{
 		std::cout << "No audio_icon image found." << std::endl;
 	}
@@ -161,7 +148,7 @@ void UNO::LoadMesiaData()
 	//Music2Btn.setScale(0.8f, 0.8f);//将背景图片等比缩小了80%
 
 	//退出按钮
-	if (!tExitBtnNormal.loadFromFile("./data/but_exit.png"))
+	if (!tExitBtnNormal.loadFromFile("./data/images/but_exit.png"))
 	{
 		std::cout << "No but_exit image found." << std::endl;
 	}
@@ -173,7 +160,7 @@ void UNO::LoadMesiaData()
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 13; j++) {
 
-			if (!card_texture1[i][j].loadFromFile("./data/cards.png", sf::IntRect(j * CARD_WIDTH, i * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT)))
+			if (!card_texture1[i][j].loadFromFile("./data/images/cards.png", sf::IntRect(j * CARD_WIDTH, i * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT)))
 			{
 				std::cout << "No cards image found." << i << " " << j << std::endl;
 			}
@@ -182,7 +169,7 @@ void UNO::LoadMesiaData()
 	}
 
 	for (int i = 0; i < 3; i++) {
-		if (!card_texture2[i].loadFromFile("./data/cards.png", sf::IntRect(i * CARD_WIDTH, 4 * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT)))
+		if (!card_texture2[i].loadFromFile("./data/images/cards.png", sf::IntRect(i * CARD_WIDTH, 4 * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT)))
 		{
 			std::cout << "No cards image found." << i << " " << std::endl;
 		}
@@ -191,14 +178,56 @@ void UNO::LoadMesiaData()
 
 	//四个方块纹理导入
 	for (int i = 0; i < 4; i++) {
-		if (!ButColor_s[i].loadFromFile("./data/colors.png", sf::IntRect(i * 104, 0, 104, 102)))
+		if (!ButColor_s[i].loadFromFile("./data/images/colors.png", sf::IntRect(i * 104, 0, 104, 102)))
 		{
 			std::cout << "No colors image found." << i << " " << std::endl;
 		}
 		ButColor[i].setTexture(ButColor_s[i]);
 	}
 
+	//uno按钮纹理导入
+	if (!unoBtn_t.loadFromFile("./data/images/but_uno.png"))
+	{
+		std::cout << "No unoBtn image found." << " " << std::endl;
+	}
+	unoBtn.setTextures(unoBtn_t, unoBtn_t, unoBtn_t);
+
+
+	//uno_cloud纹理导入
+	for (int i = 0; i < 2; i++) {
+		if (!uno_cloud_t[i].loadFromFile("./data/images/cloud.png", sf::IntRect(i * 261, 0, 261, 194)))
+		{
+			std::cout << "No colors image found." << i << " " << std::endl;
+		}
+		uno_cloud[i].setTexture(uno_cloud_t[i]);
+	}
+
+
 	std::cout << "加载纹理已好" << std::endl;
+}
+
+void UNO::LoadMusic() {
+
+	if (!bj_music_file.loadFromFile("./data/music/bj.ogg")) {
+		std::cout << "No uno music found." << std::endl;
+	}
+	bj_music.setBuffer(bj_music_file);
+
+}
+
+//绘制发牌动画
+void UNO::drawdealCard() {
+
+}
+
+void UNO::startMusic() {
+	bj_music.play();
+	bj_music.setLoop(true);
+}
+
+void UNO::stopMusic() {
+	//bj_music.stop();
+	bj_music.pause();
 }
 
 void UNO::Input()
@@ -315,6 +344,8 @@ void UNO::Input()
 			if (i < myCard_num - 1) {
 				if (myCard_array[i].card.checkMouse1(mousePosition, event) == 3) {
 
+					ButColorNum = myCard_array[i].card_suit;
+
 					if (myCard_array[i].card_suit == 4) {
 						paidui = card_sprite2[myCard_array[i].card_rank];
 					}
@@ -332,11 +363,14 @@ void UNO::Input()
 					}
 					myCard_num--;
 					myCard_array[i].card.btnState = 1;
+
 				}
 			}
 			else {
 				if (myCard_array[i].card.checkMouse(mousePosition, event) == 3) {
 
+					ButColorNum = myCard_array[i].card_suit;
+
 					if (myCard_array[i].card_suit == 4) {
 						paidui = card_sprite2[myCard_array[i].card_rank];
 					}
@@ -355,6 +389,8 @@ void UNO::Input()
 					}
 					myCard_num--;
 					myCard_array[i].card.btnState = 1;
+
+
 				}
 			}
 		}
@@ -381,9 +417,18 @@ void UNO::Input()
 			}
 			myCard_num++;
 		}
+
+		if (unoBtn.checkMouse(mousePosition, event) == 3 && myCard_num == 1) {
+
+			drawUnoflag = true;
+			time1 = clock.restart();
+
+			unoBtn.btnState = 1;
+		}
 	}
 
 }
+
 void UNO::RButtonDown(Vector2i mPoint)	//鼠标右击
 {
 	int i, j;
@@ -451,21 +496,48 @@ void UNO::Draw()
 		exitBtn.setPosition(EXIT_X, EXIT_Y);
 		window.draw(exitBtn);
 
-		card_sprite1[0][12].setPosition(821, 432);
-		window.draw(card_sprite1[0][12]);
+		/*card_sprite1[0][12].setPosition(821, 432);
+		window.draw(card_sprite1[0][12]);*/
 
 		paiding.setTextures(card_texture2[2], card_texture2[2], card_texture2[2]);
-		paiding.setPosition(821, 432);
+		paiding.setPosition(805, 420);
 		window.draw(paiding);
 
-		ButColor[0].setPosition(1200, 720);
-		window.draw(ButColor[0]);
+		//颜色方块
+		if (ButColorNum < 4) {
+			ButColor[ButColorNum].setPosition(1140, 426);
+			window.draw(ButColor[ButColorNum]);
+		}
+		else {
+			ButColor[0].setPosition(1140, 426);
+			window.draw(ButColor[0]);
+		}
 
-		paidui.setPosition(960, 432);
+
+
+		//uno按钮
+		unoBtn.setPosition(1140, 556);
+		window.draw(unoBtn);
+
+		if (drawUnoflag == true) {
+			time2 = clock.getElapsedTime();
+			if (time2.asSeconds() <= 3) {
+				uno_cloud[0].setPosition(1240, 556 - 150);
+				window.draw(uno_cloud[0]);
+			}
+			else {
+				drawUnoflag = false;
+			}
+		}
+		else {
+
+		}
+
+
+		//出牌的地方
+		paidui.setPosition(961, 420);
 		window.draw(paidui);
 
-		/*card_sprite1[2][7].setPosition(111, 111);
-		window.draw(card_sprite1[2][8]);*/
 
 		//绘制我的卡牌
 		for (int i = 0; i < myCard_num; i++) {
@@ -527,6 +599,8 @@ void UNO::DrawButton()
 void UNO::Run()
 {
 	Initial();
+	LoadMusic();
+	startMusic();
 	do
 	{
 

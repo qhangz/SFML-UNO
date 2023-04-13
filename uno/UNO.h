@@ -50,10 +50,6 @@ public:
 	int  card_suit;
 	int card_rank;
 	Button card;
-
-
-
-
 };
 
 
@@ -88,6 +84,8 @@ public:
 
 	sf::Texture tmyCard1BtnNormal[24], tmyCard1BtnHover[24], tmyCardBtnClick[24];   //加载音量开关纹理
 
+	sf::Sound bj_music;
+	sf::SoundBuffer bj_music_file;	//加载背景音乐
 
 	Button Music1Btn, Music2Btn;	//音量开关
 	sf::Texture tMusic1BtnNormal, tMusic1BtnHover, tMusic1BtnClick, tMusicBtnNormal;   //加载音量开关纹理
@@ -110,6 +108,12 @@ public:
 	//四个方块纹理导入
 	sf::Sprite ButColor[4];
 	sf::Texture ButColor_s[4];
+	int ButColorNum = 4;
+
+	//uno的按钮，喊uno的按钮
+	Button unoBtn;
+	sf::Texture unoBtn_t;
+	int drawUnoflag = false;
 
 	//打出的牌的地方
 	sf::Sprite paidui;
@@ -118,16 +122,25 @@ public:
 	Button paiding;
 	sf::Texture paiding_wenli;
 
+	//uno_cloud
+	sf::Sprite uno_cloud[2];
+	sf::Texture uno_cloud_t[2];
+
+	sf::Clock clock;
+	sf::Time time1;
+	sf::Time time2;
+
 	//sf::Sprite card[4][]
 
 	void Run();
 
 	void Initial();
 	void InitialCard();		//初始化双方卡牌
+	void LoadMesiaData();	//加载图片纹理
+	void LoadMusic();		//加载音乐文件
 	void drawdealCard();	//绘制发牌动画
 	void startMusic();
 	void stopMusic();
-	void LoadMesiaData();
 
 	void Input();
 	void RButtonDown(Vector2i mPoint);	//鼠标右击
@@ -140,7 +153,4 @@ public:
 	void DrawGameEnd();
 
 };
-
-
-
 

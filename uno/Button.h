@@ -21,4 +21,3 @@ public:
 	void setState(int);
 	void offset(double, double);
 };
-
