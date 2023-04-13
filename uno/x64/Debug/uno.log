@@ -1,0 +1,71 @@
+﻿  Button.cpp
+D:\work\gameprogram\SFML_UNO\uno\Button.cpp(96,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\Button.cpp(96,30): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  Game.cpp
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(18,2): warning C4091: “typedef ”: 没有声明变量时忽略“GAMEOVERSTATE”的左侧
+  UNO.cpp
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(18,2): warning C4091: “typedef ”: 没有声明变量时忽略“GAMEOVERSTATE”的左侧
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(389,9): warning C4101: “j”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(389,6): warning C4101: “i”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(397,9): warning C4101: “j”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(397,6): warning C4101: “i”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(472,56): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(478,59): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(510,54): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(510,40): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(519,54): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(519,40): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+  正在生成代码...
+Button.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::Transformable::setPosition(float,float)" (__imp_?setPosition@Transformable@sf@@QEAAXMM@Z)，函数 "public: void __cdecl Button::offset(double,double)" (?offset@Button@@QEAAXNN@Z) 中引用了该符号
+UNO.obj : error LNK2001: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::Transformable::setPosition(float,float)" (__imp_?setPosition@Transformable@sf@@QEAAXMM@Z)
+Button.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: class sf::Vector2<float> const & __cdecl sf::Transformable::getPosition(void)const " (__imp_?getPosition@Transformable@sf@@QEBAAEBV?$Vector2@M@2@XZ)，函数 "public: int __cdecl Button::checkMouse1(class sf::Vector2<int>,class sf::Event)" (?checkMouse1@Button@@QEAAHV?$Vector2@H@sf@@VEvent@3@@Z) 中引用了该符号
+Button.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::Texture::~Texture(void)" (__imp_??1Texture@sf@@QEAA@XZ)，函数 "public: void __cdecl Button::setTextures(class sf::Texture,class sf::Texture,class sf::Texture)" (?setTextures@Button@@QEAAXVTexture@sf@@00@Z) 中引用了该符号
+UNO.obj : error LNK2001: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::Texture::~Texture(void)" (__imp_??1Texture@sf@@QEAA@XZ)
+Button.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: class sf::Vector2<unsigned int> __cdecl sf::Texture::getSize(void)const " (__imp_?getSize@Texture@sf@@QEBA?AV?$Vector2@I@2@XZ)，函数 "public: int __cdecl Button::checkMouse1(class sf::Vector2<int>,class sf::Event)" (?checkMouse1@Button@@QEAAHV?$Vector2@H@sf@@VEvent@3@@Z) 中引用了该符号
+Button.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: class sf::Texture & __cdecl sf::Texture::operator=(class sf::Texture const &)" (__imp_??4Texture@sf@@QEAAAEAV01@AEBV01@@Z)，函数 "public: void __cdecl Button::setTextures(class sf::Texture,class sf::Texture,class sf::Texture)" (?setTextures@Button@@QEAAXVTexture@sf@@00@Z) 中引用了该符号
+UNO.obj : error LNK2001: 无法解析的外部符号 "__declspec(dllimport) public: class sf::Texture & __cdecl sf::Texture::operator=(class sf::Texture const &)" (__imp_??4Texture@sf@@QEAAAEAV01@AEBV01@@Z)
+Button.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::Sprite::setTexture(class sf::Texture const &,bool)" (__imp_?setTexture@Sprite@sf@@QEAAXAEBVTexture@2@_N@Z)，函数 "public: void __cdecl Button::setState(int)" (?setState@Button@@QEAAXH@Z) 中引用了该符号
+UNO.obj : error LNK2001: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::Sprite::setTexture(class sf::Texture const &,bool)" (__imp_?setTexture@Sprite@sf@@QEAAXAEBVTexture@2@_N@Z)
+Button.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: class sf::Texture const * __cdecl sf::Sprite::getTexture(void)const " (__imp_?getTexture@Sprite@sf@@QEBAPEBVTexture@2@XZ)，函数 "public: int __cdecl Button::checkMouse1(class sf::Vector2<int>,class sf::Event)" (?checkMouse1@Button@@QEAAHV?$Vector2@H@sf@@VEvent@3@@Z) 中引用了该符号
+Game.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: bool __cdecl sf::Window::isOpen(void)const " (__imp_?isOpen@Window@sf@@QEBA_NXZ)，函数 main 中引用了该符号
+UNO.obj : error LNK2001: 无法解析的外部符号 "__declspec(dllimport) public: bool __cdecl sf::Window::isOpen(void)const " (__imp_?isOpen@Window@sf@@QEBA_NXZ)
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::String::String(wchar_t const *)" (__imp_??0String@sf@@QEAA@PEB_W@Z)，函数 "public: __cdecl UNO::UNO(void)" (??0UNO@@QEAA@XZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::String::~String(void)" (__imp_??1String@sf@@QEAA@XZ)，函数 "public: __cdecl UNO::UNO(void)" (??0UNO@@QEAA@XZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: static class sf::Vector2<int> __cdecl sf::Mouse::getPosition(class sf::Window const &)" (__imp_?getPosition@Mouse@sf@@SA?AV?$Vector2@H@2@AEBVWindow@2@@Z)，函数 "public: void __cdecl UNO::Input(void)" (?Input@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::VideoMode::VideoMode(unsigned int,unsigned int,unsigned int)" (__imp_??0VideoMode@sf@@QEAA@III@Z)，函数 "public: __cdecl UNO::UNO(void)" (??0UNO@@QEAA@XZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::Window::create(class sf::VideoMode,class sf::String const &,unsigned int,struct sf::ContextSettings const &)" (__imp_?create@Window@sf@@QEAAXVVideoMode@2@AEBVString@2@IAEBUContextSettings@2@@Z)，函数 "public: __cdecl UNO::UNO(void)" (??0UNO@@QEAA@XZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::Window::close(void)" (__imp_?close@Window@sf@@QEAAXXZ)，函数 "public: void __cdecl UNO::Input(void)" (?Input@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: bool __cdecl sf::Window::pollEvent(class sf::Event &)" (__imp_?pollEvent@Window@sf@@QEAA_NAEAVEvent@2@@Z)，函数 "public: void __cdecl UNO::Input(void)" (?Input@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::Window::setFramerateLimit(unsigned int)" (__imp_?setFramerateLimit@Window@sf@@QEAAXI@Z)，函数 "public: void __cdecl UNO::Initial(void)" (?Initial@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::Window::display(void)" (__imp_?display@Window@sf@@QEAAXXZ)，函数 "public: void __cdecl UNO::Draw(void)" (?Draw@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::Color::Color(unsigned char,unsigned char,unsigned char,unsigned char)" (__imp_??0Color@sf@@QEAA@EEEE@Z)，函数 "public: void __cdecl UNO::Draw(void)" (?Draw@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::Texture::Texture(void)" (__imp_??0Texture@sf@@QEAA@XZ)，函数 "public: __cdecl Button::Button(void)" (??0Button@@QEAA@XZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::Texture::Texture(class sf::Texture const &)" (__imp_??0Texture@sf@@QEAA@AEBV01@@Z)，函数 "public: void __cdecl UNO::Draw(void)" (?Draw@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: bool __cdecl sf::Texture::loadFromFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,class sf::Rect<int> const &)" (__imp_?loadFromFile@Texture@sf@@QEAA_NAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AEBV?$Rect@H@2@@Z)，函数 "public: void __cdecl UNO::LoadMesiaData(void)" (?LoadMesiaData@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::RenderTarget::clear(class sf::Color const &)" (__imp_?clear@RenderTarget@sf@@QEAAXAEBVColor@2@@Z)，函数 "public: void __cdecl UNO::Draw(void)" (?Draw@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::RenderTarget::draw(class sf::Drawable const &,class sf::RenderStates const &)" (__imp_?draw@RenderTarget@sf@@QEAAXAEBVDrawable@2@AEBVRenderStates@2@@Z)，函数 "public: void __cdecl UNO::Draw(void)" (?Draw@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::RenderWindow::RenderWindow(void)" (__imp_??0RenderWindow@sf@@QEAA@XZ)，函数 "public: __cdecl UNO::UNO(void)" (??0UNO@@QEAA@XZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: virtual __cdecl sf::RenderWindow::~RenderWindow(void)" (__imp_??1RenderWindow@sf@@UEAA@XZ)，函数 "int `public: __cdecl UNO::UNO(void)'::`1'::dtor$0" (?dtor$0@?0???0UNO@@QEAA@XZ@4HA) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: __cdecl sf::Sprite::Sprite(void)" (__imp_??0Sprite@sf@@QEAA@XZ)，函数 "public: __cdecl Button::Button(void)" (??0Button@@QEAA@XZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: void __cdecl sf::Sprite::setTextureRect(class sf::Rect<int> const &)" (__imp_?setTextureRect@Sprite@sf@@QEAAXAEBV?$Rect@H@2@@Z)，函数 "public: void __cdecl UNO::DrawButton(void)" (?DrawButton@UNO@@QEAAXXZ) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: virtual __cdecl sf::Sprite::~Sprite(void)" (__imp_??1Sprite@sf@@UEAA@XZ)，函数 "int `public: __cdecl Button::Button(void)'::`1'::dtor$0" (?dtor$0@?0???0Button@@QEAA@XZ@4HA) 中引用了该符号
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: class sf::Sprite & __cdecl sf::Sprite::operator=(class sf::Sprite const &)" (__imp_??4Sprite@sf@@QEAAAEAV01@AEBV01@@Z)，函数 "public: class Button & __cdecl Button::operator=(class Button const &)" (??4Button@@QEAAAEAV0@AEBV0@@Z) 中引用了该符号
+UNO.obj : error LNK2001: 无法解析的外部符号 "private: virtual void __cdecl sf::Sprite::draw(class sf::RenderTarget &,class sf::RenderStates)const " (?draw@Sprite@sf@@EEBAXAEAVRenderTarget@2@VRenderStates@2@@Z)
+UNO.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: static class sf::RenderStates const sf::RenderStates::Default" (__imp_?Default@RenderStates@sf@@2V12@B)，函数 "public: void __cdecl UNO::Draw(void)" (?Draw@UNO@@QEAAXXZ) 中引用了该符号
+D:\work\gameprogram\SFML_UNO\x64\Debug\uno.exe : fatal error LNK1120: 31 个无法解析的外部命令

@@ -1,0 +1,35 @@
+﻿  Button.cpp
+D:\work\gameprogram\SFML_UNO\uno\Button.cpp(96,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\Button.cpp(96,30): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  Game.cpp
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(18,2): warning C4091: “typedef ”: 没有声明变量时忽略“GAMEOVERSTATE”的左侧
+  UNO.cpp
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(18,2): warning C4091: “typedef ”: 没有声明变量时忽略“GAMEOVERSTATE”的左侧
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(389,9): warning C4101: “j”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(389,6): warning C4101: “i”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(397,9): warning C4101: “j”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(397,6): warning C4101: “i”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(472,56): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(478,59): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(510,54): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(510,40): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(519,54): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(519,40): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+  正在生成代码...
+  uno.vcxproj -> D:\work\gameprogram\SFML_UNO\Debug\uno.exe
