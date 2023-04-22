@@ -404,7 +404,7 @@ void UNO::DrawTimer()
 	std::string countdownString = std::to_string(static_cast<int>(remainingSeconds)); //将整数类型的remainingSeconds强制转换为字符串类型并赋值给countdownString变量
 	if (GameFlag == 0)
 	{
-		countdownString = "Conputer Remaining:  " + countdownString;
+		countdownString = "Computer Remaining:  " + countdownString;
 	}
 	else
 	{
