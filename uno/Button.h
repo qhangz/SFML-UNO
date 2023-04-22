@@ -14,10 +14,10 @@ public:
 	Texture tNormal;            //三种不同状态的纹理
 	Texture tHover;
 	Texture tClick;
-	int checkMouse(Vector2i, Event);	//检查鼠标状态
-	int checkMouse1(Vector2i, Event);
-	void setTextures(Texture, Texture);                    //加载纹理，两种状态
-	void setTextures(Texture, Texture, Texture);        //加载纹理，三种状态
-	void setState(int);
-	void offset(double, double);
+	int CheckMouse(Vector2i, Event);	//检查鼠标状态
+	int CheckMouse1(Vector2i, Event);
+	void SetTextures(Texture, Texture);                    //加载纹理，两种状态
+	void SetTextures(Texture, Texture, Texture);        //加载纹理，三种状态
+	void SetState(int);
+	void Offset(double, double);
 };
