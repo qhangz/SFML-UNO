@@ -2,7 +2,6 @@
 #pragma once
 #include<SFML/Graphics.hpp>
 #include<SFML/Audio.hpp>
-#include<SFML/System.hpp>
 #include<Windows.h>
 #include<iostream>
 #include <stdlib.h>
@@ -85,7 +84,6 @@ public:
 	///////////Logic逻辑变量定义///////////////////////////////////////////////////////
 
 	bool gameOver, gameQuit;
-	bool gamePause;
 	bool isGameBegin;	//判断游戏是否开始
 	int isGameOverState;	//游戏结束的状态
 	bool mouseDblClkReady;	//用于鼠标双击监测
@@ -146,17 +144,24 @@ public:
 	float COUNTDOWN_DURATION = durationTime;	//游戏回合时间，用于动态增加
 	sf::Clock countdownClock;
 	sf::Clock pauseClock;	//用于暂停游戏计时	
-	float mypauseTime;	//全局记录游戏暂停的时间，用于判断什么时候继续计时
+	sf::Time pauseTime;		//暂停时的时间值
 	sf::Font font;
 	float elapsedSeconds;	//restart（）后已运行时间
 	float remainingSeconds;		//当前回合剩余时间
-	int mutexClock = 0; //互斥改变remainingSeconds
+	float pauserSeconds;
+	int mutexClock = 0;
+	int pauseClockFlag = 0;
 
 	//绘制变换颜色的动画的纹理素材导入
 	sf::Texture tChangeColorAnimation;
 	sf::Sprite sChangeColorAnimation;
 	sf::IntRect rChangeColorAnimation;
-
+	//绘制变换颜色的动画的计时器
+	sf::Clock changeClock;
+	sf::Time changeTime1;
+	sf::Time changeTime2;
+	int changeI = 0, changeJ = 0, changeScaleX = 1, changeScaleY = 1;
+	int changeI1 = 0, changeJ1 = 0;
 	//
 	sf::Texture tChangeColorPanel;
 	sf::Sprite sChangeColorPanel;
@@ -189,7 +194,6 @@ public:
 	void StopMusic();
 
 	void Input();			//输入函数
-	//void ButtonInput();		//音乐开关按键、暂停继续按键
 	void RButtonDown(Vector2i mPoint);	//鼠标右击
 	void LButtonDown(Vector2i mPoint);	//鼠标左击
 
@@ -198,12 +202,17 @@ public:
 	void PlayerLogic();	//玩家逻辑判断
 	void ExamineCard(int i);		//检查功能牌，并实现逻辑
 	void DrawTimer();	//游戏回合内的倒计时绘制
-	void PauseTimer(float pauseTime);	//用于计时器暂停
-	void ContinueTimer();	//用于重新开始计时
+	void GamePause();
+	void PauseTimer(float p);	//用于计时器暂停
+	void ContinueTimer(float p);	//用于重新开始计时
 
 	void DeleteCard(Card* card, int cardNum, int i);	//删除指定卡牌的函数
 	void TouchingCard(Card* card, int cardNum);		//摸牌的函数
 	void ChangeColor();		//改变颜色的函数
+	void SendCard();	//绘制发牌动画函数
+	void DrawBan();		//绘制禁掉动画
+	void DrawTurn();	//绘制转换方向动画
+
 
 	void Draw();
 	void DrawButton();		//绘制按钮
