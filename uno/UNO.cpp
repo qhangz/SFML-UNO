@@ -314,6 +314,9 @@ void UNO::Input()
 
 		}
 
+		//鼠标覆盖卡牌
+		isMouseHover(Mouse::getPosition(window));
+
 	}
 
 
@@ -475,6 +478,25 @@ void UNO::Logic()
 		PlayerLogic();
 
 	}
+}
+
+void UNO::isMouseHover(Vector2i mPoint)
+{
+	std::cout << mPoint.x << "," << mPoint.y << std::endl;
+	//获取鼠标坐标(mPoint.x,mPoint.y)
+	for (int i = 0; i < myCard_num; i++)
+	{
+		//if鼠标在卡牌区域内
+		if ((mPoint.x > myCard[i].Rect.left && mPoint.x < myCard[i].Rect.left + myCard[i].Rect.width) && (mPoint.y > myCard[i].Rect.top && mPoint.y < myCard[i].Rect.top + myCard[i].Rect.height))
+		{
+			myCard[i].mouseHover = true;
+		}
+		else
+		{
+			myCard[i].mouseHover = false;
+		}
+	}
+	
 }
 
 void UNO::ExamineCard(int i) {		//i为1是用户变卡牌
@@ -732,20 +754,28 @@ void UNO::Draw()
 
 		//绘制我的卡牌
 		for (int i = 0; i < myCard_num; i++) {
-			sCards.setTextureRect(sf::IntRect(myCard[i].card_y * CARD_WIDTH, myCard[i].card_x * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
-			sCards.setPosition(i * CARD_WIDTH / 2 + 300, 750);
+			
 			if (i < myCard_num - 1) {
 				myCard[i].Rect.left = i * CARD_WIDTH / 2 + 300;
 				myCard[i].Rect.top = 750;
 				myCard[i].Rect.width = CARD_WIDTH / 2;
 				myCard[i].Rect.height = CARD_HEIGHT;
+				//如果鼠标覆盖到牌上，则y坐标上移
+				if (myCard[i].mouseHover == true) {
+					myCard[i].Rect.top -= 40;
+				}
 			}
 			else {
 				myCard[i].Rect.left = i * CARD_WIDTH / 2 + 300;
 				myCard[i].Rect.top = 750;
 				myCard[i].Rect.width = CARD_WIDTH;
 				myCard[i].Rect.height = CARD_HEIGHT;
+				if (myCard[i].mouseHover == true) {
+					myCard[i].Rect.top -= 40;
+				}
 			}
+			sCards.setTextureRect(sf::IntRect(myCard[i].card_y * CARD_WIDTH, myCard[i].card_x * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
+			sCards.setPosition(myCard[i].Rect.left, myCard[i].Rect.top);
 			window.draw(sCards);
 		}
 		//绘制enemy卡牌

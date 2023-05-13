@@ -65,6 +65,7 @@ public:
 	int card_x;
 	int card_y;
 	sf::IntRect Rect;
+	bool mouseHover;	//鼠标覆盖到卡牌时卡牌上移一段距离
 };
 
 
@@ -197,6 +198,7 @@ public:
 	void RButtonDown(Vector2i mPoint);	//鼠标右击
 	void LButtonDown(Vector2i mPoint);	//鼠标左击
 
+
 	void Logic();			//主逻辑函数
 	void ComputerLogic();	//电脑的逻辑判断
 	void PlayerLogic();	//玩家逻辑判断
@@ -205,6 +207,7 @@ public:
 	void GamePause();
 	void PauseTimer(float p);	//用于计时器暂停
 	void ContinueTimer(float p);	//用于重新开始计时
+	void isMouseHover(Vector2i mPoint);	//用于鼠标覆盖卡牌判定
 
 	void DeleteCard(Card* card, int cardNum, int i);	//删除指定卡牌的函数
 	void TouchingCard(Card* card, int cardNum);		//摸牌的函数
