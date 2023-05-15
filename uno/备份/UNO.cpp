@@ -20,7 +20,6 @@ void UNO::Initial()
 
 	gameOver = false;
 	gameQuit = false;
-	//gamePause = false;
 
 	GameFlag = 1;
 
@@ -29,13 +28,12 @@ void UNO::Initial()
 
 	music_state = 0;//音乐状态
 
+	mutexClock = 0;
 
 	isGameOverState = ncNo;	//初始化游戏的结束状态（未结束）
 	isGameBegin = false;	//初始化游戏是否开始
 
 	changecolorFlag = 0;	//变量为1时要进行游戏改变颜色
-
-	mutexClock = 0;
 
 	LoadMesiaData();
 }
@@ -192,20 +190,17 @@ void UNO::DrawDealCard() {
 void UNO::StartMusic() {
 	bj_music.play();
 	bj_music.setLoop(true);
-	
 }
 
 void UNO::StopMusic() {
 	//bj_music.stop();
 	bj_music.pause();
-	
-	
 }
 
 void UNO::Input()
 {
 	sf::Event event;
-	
+
 	Vector2i mousePosition = Mouse::getPosition(window);
 
 	while (window.pollEvent(event))
@@ -240,8 +235,8 @@ void UNO::Input()
 						StopMusic();
 					}
 				}
-
 			}
+
 			if (GameFlag == 1) {
 				//我的卡牌点击监听
 				for (int i = 0; i < myCard_num; i++) {
@@ -276,13 +271,13 @@ void UNO::Input()
 					for (int i = 0; i < 4; i++) {
 						if (RectColor[i].contains(event.mouseButton.x, event.mouseButton.y) && myCard_num < 24) {
 							changecolorFlag = 2;
+							changeClock.restart();
 							std::cout << "变换颜色" << i << "颜色逻辑" << changecolorFlag << std::endl;
 							buttonColorNum = i;
 						}
 					}
 				}
 			}
-
 		}
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
 		{
@@ -318,6 +313,9 @@ void UNO::Input()
 			RButtonDown(Mouse::getPosition(window));	//鼠标单击
 
 		}
+
+		//鼠标覆盖卡牌
+		isMouseHover(Mouse::getPosition(window));
 
 	}
 
@@ -363,7 +361,9 @@ void UNO::Input()
 
 void UNO::RButtonDown(Vector2i mPoint)	//鼠标右击
 {
-	
+	int i, j;
+	//获取鼠标当前点击的块
+
 
 }
 
@@ -387,22 +387,30 @@ void UNO::TouchingCard(Card* card, int cardNum) {
 
 void UNO::LButtonDown(Vector2i mPoint)	//鼠标左击
 {
-	
+	int i, j;
+#	//获取鼠标当前点击的块
+
+	//检测是否点到了牌
+
 }
 
 //绘制游戏运行时间（计时器）
 //绘制游戏运行时间（计时器）
 void UNO::DrawTimer()
 {
-
 	// 计算剩余的时间
 	if (mutexClock == 0)
 	{
 		elapsedSeconds = countdownClock.getElapsedTime().asSeconds(); //将时间转换为秒数，记录已经流逝的时间
 		remainingSeconds = COUNTDOWN_DURATION - elapsedSeconds; //通过用倒计时总时间减去已经流逝的时间，计算出还剩下多少秒才能到达目标倒计时时间
 	}
+	else {
+		countdownClock.restart();
+		elapsedSeconds = countdownClock.getElapsedTime().asSeconds(); //将时间转换为秒数，记录已经流逝的时间
+		remainingSeconds = COUNTDOWN_DURATION - elapsedSeconds; //通过用倒计时总时间减去已经流逝的时间，计算出还剩下多少秒才能到达目标倒计时时间
+	}
 
-	
+
 	//检查倒计时是否结束
 	if (remainingSeconds <= 0.f)
 	{
@@ -410,6 +418,7 @@ void UNO::DrawTimer()
 		if (GameFlag == 0)
 		{
 			GameFlag = 1;
+
 		}
 		else
 		{
@@ -441,24 +450,21 @@ void UNO::DrawTimer()
 	countdownText.setOrigin(countdownText.getLocalBounds().width / 2.f, countdownText.getLocalBounds().height / 2.f);
 
 	window.draw(countdownText);
-	
+
 }
 //暂停计时器
-void UNO::PauseTimer(float pauseTime)
+void UNO::PauseTimer(float p)
 {
+	std::cout << "p" << "暂停时间" << std::endl;
 	mutexClock = 1;
-	COUNTDOWN_DURATION = durationTime + pauseTime;
-	pauseClock.restart();
-	mypauseTime = pauseTime;
+	COUNTDOWN_DURATION = p;
 }
 //重新开始计时
-void UNO::ContinueTimer()
+void UNO::ContinueTimer(float p)
 {
-	if (pauseClock.getElapsedTime().asSeconds() >= mypauseTime)
-	{
-		mutexClock = 0;
-	}
-	
+	mutexClock = 0;
+	pauseClockFlag = 1;
+	COUNTDOWN_DURATION = p;
 }
 
 void UNO::Logic()
@@ -472,6 +478,25 @@ void UNO::Logic()
 		PlayerLogic();
 
 	}
+}
+
+void UNO::isMouseHover(Vector2i mPoint)
+{
+	std::cout << mPoint.x << "," << mPoint.y << std::endl;
+	//获取鼠标坐标(mPoint.x,mPoint.y)
+	for (int i = 0; i < myCard_num; i++)
+	{
+		//if鼠标在卡牌区域内
+		if ((mPoint.x > myCard[i].Rect.left && mPoint.x < myCard[i].Rect.left + myCard[i].Rect.width) && (mPoint.y > myCard[i].Rect.top && mPoint.y < myCard[i].Rect.top + myCard[i].Rect.height))
+		{
+			myCard[i].mouseHover = true;
+		}
+		else
+		{
+			myCard[i].mouseHover = false;
+		}
+	}
+	
 }
 
 void UNO::ExamineCard(int i) {		//i为1是用户变卡牌
@@ -510,9 +535,11 @@ void UNO::ExamineCard(int i) {		//i为1是用户变卡牌
 	else {		//i为0是电脑变卡牌
 		if (sDiscardPile_i == 4 && sDiscardPile_j == 0) {		//变换颜色卡牌
 			changecolorFlag = 1;
+			PauseTimer(remainingSeconds);
 		}
 		else if (sDiscardPile_i == 4 && sDiscardPile_j == 1) {		//变换颜色并给对方加四张卡牌
 			changecolorFlag = 1;
+			PauseTimer(remainingSeconds);
 			TouchingCard(enemyCard, enemyCard_num);
 			enemyCard_num++;
 			TouchingCard(enemyCard, enemyCard_num);
@@ -727,20 +754,28 @@ void UNO::Draw()
 
 		//绘制我的卡牌
 		for (int i = 0; i < myCard_num; i++) {
-			sCards.setTextureRect(sf::IntRect(myCard[i].card_y * CARD_WIDTH, myCard[i].card_x * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
-			sCards.setPosition(i * CARD_WIDTH / 2 + 300, 750);
+			
 			if (i < myCard_num - 1) {
 				myCard[i].Rect.left = i * CARD_WIDTH / 2 + 300;
 				myCard[i].Rect.top = 750;
 				myCard[i].Rect.width = CARD_WIDTH / 2;
 				myCard[i].Rect.height = CARD_HEIGHT;
+				//如果鼠标覆盖到牌上，则y坐标上移
+				if (myCard[i].mouseHover == true) {
+					myCard[i].Rect.top -= 40;
+				}
 			}
 			else {
 				myCard[i].Rect.left = i * CARD_WIDTH / 2 + 300;
 				myCard[i].Rect.top = 750;
 				myCard[i].Rect.width = CARD_WIDTH;
 				myCard[i].Rect.height = CARD_HEIGHT;
+				if (myCard[i].mouseHover == true) {
+					myCard[i].Rect.top -= 40;
+				}
 			}
+			sCards.setTextureRect(sf::IntRect(myCard[i].card_y * CARD_WIDTH, myCard[i].card_x * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
+			sCards.setPosition(myCard[i].Rect.left, myCard[i].Rect.top);
 			window.draw(sCards);
 		}
 		//绘制enemy卡牌
@@ -762,11 +797,10 @@ void UNO::Draw()
 		cardPileIntRect.height = CARD_HEIGHT;
 		window.draw(sCards);
 
+		changeTime2 = changeClock.getElapsedTime();
 		if (changecolorFlag == 1) {
 			sChangeColorPanel.setPosition(960 - 275, 540 - 305 * 0.75 * 0.5);
 			sChangeColorPanel.setScale(sf::Vector2f(1, 0.75));
-			sf::Color color = Color(0, 0, 0, 255);
-			sChangeColorPanel.setColor(color);
 			window.draw(sChangeColorPanel);
 			for (int i = 0; i < 4; i++) {
 				sRectColor.setTextureRect(sf::IntRect(i * 104, 0, 104, 102));
@@ -779,9 +813,67 @@ void UNO::Draw()
 			}
 		}
 		else if (changecolorFlag == 2) {
-
-
-			changecolorFlag = 0;
+			if (changeTime2.asSeconds() <= 2) {
+				std::cout << "绘制变换动画1" << std::endl;
+				sChangeColorAnimation.setTextureRect(sf::IntRect(changeJ * 328, changeI * 315, 328, 315));
+				sChangeColorAnimation.setPosition(960 - 328 / 2, 540 - 315 / 2);
+				changeJ1 = changeJ1 + 5;
+				changeI1 = changeI1 + 5;
+				if (changeJ1 % 10 == 0) {
+					changeJ = (changeJ1 / 10) % 6;
+				}
+				else if (changeJ1 == 60) {
+					changeJ1 = 0;
+				}
+				if (changeI1 % 10 == 0) {
+					changeI = (changeI1 / 10) % 3;
+				}
+				else if (changeI1 == 30) {
+					changeI1 = 0;
+				}
+				changeJ = changeJ % 6;
+				changeI = changeI % 3;
+				window.draw(sChangeColorAnimation);
+			}
+			else if (changeTime2.asSeconds() <= 4) {
+				std::cout << "绘制变换动画2" << std::endl;
+				switch (buttonColorNum)
+				{
+				case 0:
+					changeI = 1;
+					changeJ = 0;
+					break;
+				case 1:
+					changeI = 0;
+					changeJ = 2;
+					break;
+				case 2:
+					changeI = 2;
+					changeJ = 2;
+					break;
+				case 3:
+					changeI = 1;
+					changeJ = 4;
+					break;
+				default:
+					break;
+				}
+				sChangeColorAnimation.setTextureRect(sf::IntRect(changeJ * 328, changeI * 315, 328, 315));
+				sChangeColorAnimation.setPosition(960 - 328 / 2, 540 - 315 / 2);
+				sChangeColorAnimation.setScale(changeScaleX, changeScaleY);
+				changeScaleX = changeScaleX + 0.1;
+				changeScaleY = changeScaleY + 0.1;
+				window.draw(sChangeColorAnimation);
+			}
+			else {
+				changeI = 0;
+				changeJ = 0;
+				changeScaleX = 1;
+				changeScaleY = 1;
+				changecolorFlag = 0;
+				ContinueTimer(COUNTDOWN_DURATION);
+				std::cout << "change" << changecolorFlag << std::endl;
+			}
 		}
 	}
 
@@ -794,37 +886,29 @@ void UNO::Draw()
 	window.display();
 }
 
+void UNO::SendCard() {
+
+}
+
+void UNO::DrawButton() {
+
+}
+void UNO::DrawTurn() {
+
+}
+
+void UNO::GamePause() {
+
+}
+
 void UNO::DrawGameEnd()
 {
 
 }
 
-void UNO::DrawButton()
-{
 
-}
 
-void SimpleRandDemo(int n)
-{
-	// Print n random numbers.
-	int i;
-	for (i = 0; i < n; i++)
-		printf(" %6d\n", rand());
-}
 
-void RangedRandDemo(int range_min, int range_max, int n)
-{
-	// Generate random numbers in the half-closed interval
-	// [range_min, range_max). In other words,
-	// range_min <= random number < range_max
-	int i;
-	for (i = 0; i < n; i++)
-	{
-		int u = (double)rand() / (RAND_MAX + 1) * (range_max - range_min)
-			+ range_min;
-		printf(" %6d\n", u);
-	}
-}
 
 void UNO::Run()
 {
@@ -836,14 +920,12 @@ void UNO::Run()
 
 		while (window.isOpen() && gameOver == false)
 		{
-			
+
 			Input();
 
 			Logic();
 
 			Draw();
-			
-			
 		}
 	} while (!gameQuit && window.isOpen());
 
