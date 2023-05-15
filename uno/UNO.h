@@ -21,6 +21,13 @@ using namespace sf;
 //卡牌大小
 #define CARD_WIDTH 156
 #define CARD_HEIGHT 242
+//摸牌位置
+#define CARDPILE_X 805
+#define CARDPILE_Y 420
+//出牌位置
+#define SDISCARDPILE_X 961
+#define SDISCARDPILE_Y 420
+
 
 //枚举定义游戏状态
 typedef enum GAMEOVERSTATE
@@ -64,7 +71,11 @@ class Card {
 public:
 	int card_x;
 	int card_y;
+	int gradient_i = 0, gradient_j;
+	int gradientCount = 0;
+	int gradientColorChangeCount = 0;	//变换颜色的计数
 	sf::IntRect Rect;
+	sf::IntRect GradientRect;
 	bool mouseHover;	//鼠标覆盖到卡牌时卡牌上移一段距离
 };
 
@@ -90,19 +101,27 @@ public:
 	bool mouseDblClkReady;	//用于鼠标双击监测
 	int GameFlag;		//判断用户操作的变量，0为电脑操作，1为用户操作
 	int myCard_num, enemyCard_num;		//双方卡牌数量
-	int music_state;	//判断音乐状态
+	int music_state = 0;	//判断音乐状态
 	int sDiscardPile_i, sDiscardPile_j;		//出牌的地方
 	int cardPile_i = 4, cardPile_j = 2;		//摸牌的地方
 	bool touchingFlag;		//摸牌的判断
 	bool showingFlag;		//出牌的判断
 	int changecolorFlag;	//判断此时是否需要进行颜色变换
+	int sendCardX, sendCardY;
+	int fps = 60;
+	int aCardFlag = 0;	//判断是否处于动画中
+	int cardFlag;	//判断是摸牌还是出牌 1为摸牌 0为出牌
+	int cardFlag1;	//判断是否是哪个摸牌，哪个出牌，1为用户，0为电脑
+	float aCardX1, aCardX2, aCardY1, aCardY2;
+	float aCardDx, aCardDy;
+	int click_state = 0;
 
+	int touch_flag;
 
 	/////////纹理导入变量////////////////////////////////////////////////////////////////////////////////////////
 	sf::Texture tCards;				//卡牌纹理导入
 	sf::Sprite sCards;				//卡牌精灵对象
 	Card myCard[24], enemyCard[24];		//双方卡组
-
 
 	sf::Texture tBackground[2];		//创建纹理对象
 	sf::Sprite sBackground[2];		//创建精灵对象
@@ -123,6 +142,11 @@ public:
 	sf::Clock clock;
 	sf::Time time1;
 	sf::Time time2;
+
+	//
+	sf::Clock computerClock;
+	sf::Time computerTime;
+
 	//绘制uno动画导入纹理
 	sf::Texture tUno_cloud;
 	sf::Sprite sUno_cloud;
@@ -163,9 +187,23 @@ public:
 	sf::Time changeTime2;
 	int changeI = 0, changeJ = 0, changeScaleX = 1, changeScaleY = 1;
 	int changeI1 = 0, changeJ1 = 0;
-	//
+
+	//牌移动动画
+	sf::Clock CardClock;
+	sf::Time CardTime1;
+	sf::Time CardTime2;
+	float aCardX, aCardY;		//CardAnimation的x, y动态变换
+
+
+	//修改颜色面板
 	sf::Texture tChangeColorPanel;
 	sf::Sprite sChangeColorPanel;
+
+	//提示框素材
+	sf::Texture tGradient;
+	sf::Sprite sGradient;
+
+
 
 	///////////	///// /////////////////////////////////////////////////////////////////////////////////////////
 		//旧变量
@@ -198,7 +236,6 @@ public:
 	void RButtonDown(Vector2i mPoint);	//鼠标右击
 	void LButtonDown(Vector2i mPoint);	//鼠标左击
 
-
 	void Logic();			//主逻辑函数
 	void ComputerLogic();	//电脑的逻辑判断
 	void PlayerLogic();	//玩家逻辑判断
@@ -212,7 +249,7 @@ public:
 	void DeleteCard(Card* card, int cardNum, int i);	//删除指定卡牌的函数
 	void TouchingCard(Card* card, int cardNum);		//摸牌的函数
 	void ChangeColor();		//改变颜色的函数
-	void SendCard();	//绘制发牌动画函数
+	void CardAnimation(int x1, int y1, int x2, int y2, bool flag);	//绘制发牌动画函数
 	void DrawBan();		//绘制禁掉动画
 	void DrawTurn();	//绘制转换方向动画
 
