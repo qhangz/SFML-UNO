@@ -26,7 +26,7 @@ void UNO::Initial()
 	myCard_num = 7;		//我的卡牌数量
 	enemyCard_num = 7;	//敌方卡牌数量
 
-	music_state = 0;//音乐状态
+	//music_state = 0;//音乐状态
 
 	mutexClock = 0;
 
@@ -162,6 +162,12 @@ void UNO::LoadMesiaData()
 	}
 	sChangeColorPanel.setTexture(tChangeColorPanel);
 
+	//加载Gradient
+	if (!tGradient.loadFromFile("./data/images/gradient.png"))
+	{
+		std::cout << "No Gradient panel image found." << " " << std::endl;
+	}
+	sGradient.setTexture(tGradient);
 
 	//加载字体
 	if (!font.loadFromFile("./data/Fonts/ZCOOLKuaiLe-Regular.ttf"))
@@ -218,6 +224,8 @@ void UNO::Input()
 		}
 
 		//鼠标交互（目前只设置了左右键单击）
+		//我的卡牌点击监听
+
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
 		{
 			std::cout << "Mouse::Left Pressed" << std::endl;
@@ -237,11 +245,11 @@ void UNO::Input()
 				}
 			}
 
-			if (GameFlag == 1) {
+			if (GameFlag == 1 && aCardFlag == 0 && changecolorFlag == 0) {
 				//我的卡牌点击监听
 				for (int i = 0; i < myCard_num; i++) {
 					if (myCard[i].Rect.contains(event.mouseButton.x, event.mouseButton.y)) {
-						std::cout << "用户出牌" << i << std::endl;
+						std::cout << aCardFlag << "用户出牌" << i << std::endl;
 						sDiscardPile_i = myCard[i].card_x;
 						sDiscardPile_j = myCard[i].card_y;
 						if (myCard[i].card_x == 4) {
@@ -250,22 +258,60 @@ void UNO::Input()
 						else {
 							buttonColorNum = myCard[i].card_x;
 						}
-						DeleteCard(myCard, myCard_num, i);
-						myCard_num--;
+						//出牌的动画
+						if (aCardFlag == 0) {
+							std::cout << "用户出牌" << i << std::endl;
+							CardClock.restart();
+							aCardFlag = 1;
+							cardFlag = 0;
+							cardFlag1 = 1;
+							aCardX1 = i * CARD_WIDTH / 2 + 300;
+							aCardY1 = 750;
+							aCardX2 = SDISCARDPILE_X;
+							aCardY2 = SDISCARDPILE_Y;
+							aCardX = aCardX1;
+							aCardY = aCardY1;
+							aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+							aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+							PauseTimer(remainingSeconds);
+							std::cout << "aCardX" << aCardX << "aCardY" << aCardY << "aCardDx" << aCardDx << "aCradDy" << aCardDy << std::endl;
+						}
+
+						/*DeleteCard(myCard, myCard_num, i);
+						myCard_num--;*/
 						//切换成电脑操作
-						GameFlag = 0;
+						/*GameFlag = 0;
+
 						ExamineCard(0);
-						countdownClock.restart();
+
+
+						countdownClock.restart();*/
 					}
+
 				}
 				//摸牌的监听
 				if (cardPileIntRect.contains(event.mouseButton.x, event.mouseButton.y) && myCard_num < 24) {
 					std::cout << "用户摸牌" << std::endl;
-					TouchingCard(myCard, myCard_num);
-					myCard_num++;
+					//摸牌的动画
+					if (aCardFlag == 0) {
+						CardClock.restart();
+						aCardFlag = 1;
+						cardFlag = 1;
+						cardFlag1 = 1;
+						PauseTimer(remainingSeconds);
+						aCardX1 = CARDPILE_X;
+						aCardY1 = CARDPILE_Y;
+						aCardX = aCardX1;
+						aCardY = aCardY1;
+						aCardX2 = (myCard_num)*CARD_WIDTH / 2 + 300;
+						aCardY2 = 750;
+						aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+						aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+					}
+
+					//TouchingCard(myCard, myCard_num);
+					//myCard_num++;
 					//切替换成电脑操作 
-					GameFlag = 0;
-					countdownClock.restart();
 				}
 				if (changecolorFlag == 1) {
 					for (int i = 0; i < 4; i++) {
@@ -275,6 +321,7 @@ void UNO::Input()
 							std::cout << "变换颜色" << i << "颜色逻辑" << changecolorFlag << std::endl;
 							buttonColorNum = i;
 						}
+
 					}
 				}
 			}
@@ -313,7 +360,6 @@ void UNO::Input()
 			RButtonDown(Mouse::getPosition(window));	//鼠标单击
 
 		}
-
 		//鼠标覆盖卡牌
 		isMouseHover(Mouse::getPosition(window));
 
@@ -368,6 +414,8 @@ void UNO::RButtonDown(Vector2i mPoint)	//鼠标右击
 }
 
 void UNO::TouchingCard(Card* card, int cardNum) {
+
+
 	int a;		//随机数
 	int x, y;
 	a = rand() % 54;
@@ -437,7 +485,7 @@ void UNO::DrawTimer()
 	std::string countdownString = std::to_string(static_cast<int>(remainingSeconds)); //将整数类型的remainingSeconds强制转换为字符串类型并赋值给countdownString变量
 	if (GameFlag == 0)
 	{
-		countdownString = "Conputer Remaining:  " + countdownString;
+		countdownString = "Computer Remaining:  " + countdownString;
 	}
 	else
 	{
@@ -469,10 +517,21 @@ void UNO::ContinueTimer(float p)
 
 void UNO::Logic()
 {
-	if (GameFlag == 0) {	//电脑操作逻辑判断
+	if (GameFlag == 0 && aCardFlag == 0) {	//电脑操作逻辑判断
 
-		ComputerLogic();
+		/*changeClock.restart();
+		changeTime2 = changeClock.getElapsedTime();*/
+		/*if (changeTime2.asSeconds() < 2) {
 
+		}
+		else {
+			ComputerLogic();
+		}*/
+		//std::cout << "remainingSeconds: " << remainingSeconds << std::endl;
+		if (remainingSeconds < 7.1 && remainingSeconds > 6.9) {
+			//std::cout << "remainingSeconds: " << remainingSeconds << std::endl;
+			ComputerLogic();
+		}
 	}
 	else {			//用户操作逻辑判断
 		PlayerLogic();
@@ -482,7 +541,7 @@ void UNO::Logic()
 
 void UNO::isMouseHover(Vector2i mPoint)
 {
-	std::cout << mPoint.x << "," << mPoint.y << std::endl;
+	//std::cout << mPoint.x << "," << mPoint.y << std::endl;
 	//获取鼠标坐标(mPoint.x,mPoint.y)
 	for (int i = 0; i < myCard_num; i++)
 	{
@@ -496,11 +555,10 @@ void UNO::isMouseHover(Vector2i mPoint)
 			myCard[i].mouseHover = false;
 		}
 	}
-	
-}
 
+}
 void UNO::ExamineCard(int i) {		//i为1是用户变卡牌
-	if (i) {
+	if (i && aCardFlag == 0) {
 		if (sDiscardPile_i == 4 && sDiscardPile_j == 0) {		//变换颜色卡牌
 			int a = rand() % 4;
 			buttonColorNum = a;
@@ -508,61 +566,103 @@ void UNO::ExamineCard(int i) {		//i为1是用户变卡牌
 		else if (sDiscardPile_i == 4 && sDiscardPile_j == 1) {		//变换颜色并给对方加四张卡牌
 			int a = rand() % 4;
 			buttonColorNum = a;
-			TouchingCard(myCard, myCard_num);
-			myCard_num++;
-			TouchingCard(myCard, myCard_num);
-			myCard_num++;
-			TouchingCard(myCard, myCard_num);
-			myCard_num++;
-			TouchingCard(myCard, myCard_num);
-			myCard_num++;
+			if (aCardFlag == 0) {
+				CardClock.restart();
+				PauseTimer(remainingSeconds);
+				aCardFlag = 4;
+				cardFlag1 = 1;
+				cardFlag = 1;
+				CardClock.restart();
+				aCardX1 = CARDPILE_X;
+				aCardY1 = CARDPILE_Y + 50;
+				aCardX = aCardX1;
+				aCardY = aCardY1;
+				aCardX2 = (enemyCard_num)*CARD_WIDTH / 2 + 300;
+				aCardY2 = 750;
+				aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+				aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+			}
+
 			std::cout << "用户摸4牌" << std::endl;
 		}
 		else if (sDiscardPile_i < 4 && sDiscardPile_j == 10) {		//禁掉下一个人的卡牌
-			GameFlag = 1 - GameFlag;
+			GameFlag = 0;
 		}
 		else if (sDiscardPile_i < 4 && sDiscardPile_j == 11) {		//逆转方向
-			GameFlag = 1 - GameFlag;
+			GameFlag = 0;
 		}
 		else if (sDiscardPile_i < 4 && sDiscardPile_j == 12) {		//给下一个人加俩张卡牌
-			TouchingCard(myCard, myCard_num);
-			myCard_num++;
-			TouchingCard(myCard, myCard_num);
-			myCard_num++;
+			if (aCardFlag == 0) {
+				CardClock.restart();
+				PauseTimer(remainingSeconds);
+				aCardFlag = 2;
+				cardFlag1 = 1;
+				cardFlag = 1;
+				CardClock.restart();
+				aCardX1 = CARDPILE_X;
+				aCardY1 = CARDPILE_Y + 30;
+				aCardX = aCardX1;
+				aCardY = aCardY1;
+				aCardX2 = (enemyCard_num)*CARD_WIDTH / 2 + 300;
+				aCardY2 = 750;
+				aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+				aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+			}
 			std::cout << "用户摸2牌" << std::endl;
 		}
 	}
-	else {		//i为0是电脑变卡牌
+	else if (aCardFlag == 0) {		//i为0是电脑变卡牌
 		if (sDiscardPile_i == 4 && sDiscardPile_j == 0) {		//变换颜色卡牌
-			changecolorFlag = 1;
+			changecolorFlag = 3;
 			PauseTimer(remainingSeconds);
 		}
 		else if (sDiscardPile_i == 4 && sDiscardPile_j == 1) {		//变换颜色并给对方加四张卡牌
-			changecolorFlag = 1;
-			PauseTimer(remainingSeconds);
-			TouchingCard(enemyCard, enemyCard_num);
-			enemyCard_num++;
-			TouchingCard(enemyCard, enemyCard_num);
-			enemyCard_num++;
-			TouchingCard(enemyCard, enemyCard_num);
-			enemyCard_num++;
-			TouchingCard(enemyCard, enemyCard_num);
-			enemyCard_num++;
+			changecolorFlag = 3;
+			if (aCardFlag == 0) {
+				CardClock.restart();
+				PauseTimer(remainingSeconds);
+				aCardFlag = 4;
+				cardFlag1 = 0;
+				cardFlag = 1;
+				CardClock.restart();
+				aCardX1 = CARDPILE_X;
+				aCardY1 = CARDPILE_Y - 30;
+				aCardX = aCardX1;
+				aCardY = aCardY1;
+				aCardX2 = (myCard_num)*CARD_WIDTH / 2 + 300;
+				aCardY2 = 30;
+				aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+				aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+			}
+
 			std::cout << "电脑摸4牌" << std::endl;
 		}
 		else if (sDiscardPile_i < 4 && sDiscardPile_j == 10) {		//禁掉下一个人的卡牌
-			GameFlag = 1 - GameFlag;
+			GameFlag = 1;
 		}
 		else if (sDiscardPile_i < 4 && sDiscardPile_j == 11) {		//逆转方向
-			GameFlag = 1 - GameFlag;
+			GameFlag = 1;
 		}
 		else if (sDiscardPile_i < 4 && sDiscardPile_j == 12) {		//给下一个人加俩张卡牌
-			TouchingCard(enemyCard, enemyCard_num);
-			enemyCard_num++;
-			TouchingCard(enemyCard, enemyCard_num);
+			if (aCardFlag == 0) {
+				CardClock.restart();
+				PauseTimer(remainingSeconds);
+				aCardFlag = 2;
+				cardFlag1 = 0;
+				cardFlag = 1;
+				CardClock.restart();
+				aCardX1 = CARDPILE_X;
+				aCardY1 = CARDPILE_Y - 30;
+				aCardX = aCardX1;
+				aCardY = aCardY1;
+				aCardX2 = (myCard_num)*CARD_WIDTH / 2 + 300;
+				aCardY2 = 30;
+				aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+				aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+			}
 			std::cout << "电脑摸2牌" << std::endl;
-			enemyCard_num++;
 		}
+
 	}
 }
 
@@ -571,11 +671,11 @@ void UNO::ComputerLogic()
 	//重置回合时间
 	//countdownClock.restart();
 	//声明这是computer的回合
-	int touch_flag = 1;
+	touch_flag = 1;
 	std::cout << buttonColorNum << std::endl;
 	for (int i = 0; i < enemyCard_num; i++) {
 		std::cout << enemyCard[i].card_x << " " << enemyCard[i].card_y << "sDiscardPile  " << sDiscardPile_i << " " << sDiscardPile_j << " " << enemyCard_num << std::endl;
-		if (enemyCard[i].card_x == buttonColorNum) {
+		if (enemyCard[i].card_x == buttonColorNum && aCardFlag == 0) {
 
 			std::cout << "电脑出牌" << i << std::endl;
 			sDiscardPile_i = enemyCard[i].card_x;
@@ -587,17 +687,29 @@ void UNO::ComputerLogic()
 			else {
 				buttonColorNum = enemyCard[i].card_x;
 			}
-			DeleteCard(enemyCard, enemyCard_num, i);
-			enemyCard_num--;
+			//出牌的动画
+			if (aCardFlag == 0) {
+				CardClock.restart();
+				aCardFlag = 1;
+				cardFlag = 0;
+				cardFlag1 = 0;
+				aCardX1 = i * CARD_WIDTH / 2 + 300;
+				aCardY1 = 30;
+				aCardX2 = SDISCARDPILE_X;
+				aCardY2 = SDISCARDPILE_Y;
+				aCardX = aCardX1;
+				aCardY = aCardY1;
+				aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+				aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+				PauseTimer(remainingSeconds);
+			}
+
 			//切换成用户操作
-			GameFlag = 1;
-			touch_flag = 0;
-			ExamineCard(GameFlag);
-			countdownClock.restart();
+
 			break;
 
 		}
-		else if (enemyCard[i].card_y == sDiscardPile_j) {
+		else if (enemyCard[i].card_y == sDiscardPile_j && aCardFlag == 0) {
 			std::cout << "电脑出牌" << i << std::endl;
 			sDiscardPile_i = enemyCard[i].card_x;
 			sDiscardPile_j = enemyCard[i].card_y;
@@ -607,16 +719,27 @@ void UNO::ComputerLogic()
 			else {
 				buttonColorNum = enemyCard[i].card_x;
 			}
-			DeleteCard(enemyCard, enemyCard_num, i);
-			enemyCard_num--;
+			//出牌的动画
+			if (aCardFlag == 0) {
+				CardClock.restart();
+				aCardFlag = 1;
+				cardFlag = 0;
+				cardFlag1 = 0;
+				aCardX1 = i * CARD_WIDTH / 2 + 300;
+				aCardY1 = 30;
+				aCardX2 = SDISCARDPILE_X;
+				aCardY2 = SDISCARDPILE_Y;
+				aCardX = aCardX1;
+				aCardY = aCardY1;
+				aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+				aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+				PauseTimer(remainingSeconds);
+			}
 			//切换成用户操作
-			GameFlag = 1;
-			touch_flag = 0;
-			ExamineCard(GameFlag);
-			countdownClock.restart();
+
 			break;
 		}
-		else if (enemyCard[i].card_x == 4) {
+		else if (enemyCard[i].card_x == 4 && aCardFlag == 0) {
 			std::cout << "电脑出牌" << i << std::endl;
 			sDiscardPile_i = enemyCard[i].card_x;
 			sDiscardPile_j = enemyCard[i].card_y;
@@ -626,23 +749,51 @@ void UNO::ComputerLogic()
 			else {
 				buttonColorNum = enemyCard[i].card_x;
 			}
-			DeleteCard(enemyCard, enemyCard_num, i);
-			enemyCard_num--;
+
+			//出牌的动画
+			if (aCardFlag == 0) {
+				CardClock.restart();
+				aCardFlag = 1;
+				cardFlag = 0;
+				cardFlag1 = 0;
+				aCardX1 = i * CARD_WIDTH / 2 + 300;
+				aCardY1 = 30;
+				aCardX2 = SDISCARDPILE_X;
+				aCardY2 = SDISCARDPILE_Y;
+				aCardX = aCardX1;
+				aCardY = aCardY1;
+				aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+				aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+				PauseTimer(remainingSeconds);
+			}
 			//切换成用户操作
-			GameFlag = 1;
-			touch_flag = 0;
-			ExamineCard(GameFlag);
-			countdownClock.restart();
+
 			break;
 		}
 	}
 	if (touch_flag) {
 		std::cout << "电脑摸牌" << std::endl;
-		TouchingCard(enemyCard, enemyCard_num);
-		enemyCard_num++;
+
+		if (aCardFlag == 0) {
+			CardClock.restart();
+			PauseTimer(remainingSeconds);
+			aCardFlag = 1;
+			cardFlag1 = 0;
+			cardFlag = 1;
+			CardClock.restart();
+			aCardX1 = CARDPILE_X;
+			aCardY1 = CARDPILE_Y - 30;
+			aCardX = aCardX1;
+			aCardY = aCardY1;
+			aCardX2 = (enemyCard_num)*CARD_WIDTH / 2 + 300;
+			aCardY2 = 30;
+			aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+			aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+		}
+
 		//切替换成电脑操作 
 		GameFlag = 1;
-		ExamineCard(GameFlag);
+		//ExamineCard(GameFlag);
 		countdownClock.restart();
 	}
 	GameFlag = 1;
@@ -655,6 +806,8 @@ void UNO::PlayerLogic()
 	//声明这是player的回合
 
 }
+
+
 
 void UNO::ChangeColor() {
 
@@ -676,7 +829,7 @@ void UNO::Draw()
 	window.clear(); //清屏
 
 	//绘制背景
-	//std::cout << stage_state << std::endl;
+	std::cout << "remaningSeconds: " << remainingSeconds << std::endl;
 	if (!isGameBegin) {
 
 		sBackground[0].setPosition(0, 0);
@@ -754,7 +907,45 @@ void UNO::Draw()
 
 		//绘制我的卡牌
 		for (int i = 0; i < myCard_num; i++) {
-			
+			sCards.setTextureRect(sf::IntRect(myCard[i].card_y * CARD_WIDTH, myCard[i].card_x * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
+			sGradient.setTextureRect(sf::IntRect(myCard[i].gradient_i * CARD_WIDTH, 0, CARD_WIDTH, CARD_HEIGHT));
+			myCard[i].gradientCount++;
+			myCard[i].gradientColorChangeCount++;
+			if (myCard[i].gradientCount == 6) {
+				myCard[i].gradientCount = 0;
+				myCard[i].gradient_i++;
+				myCard[i].gradient_i = myCard[i].gradient_i % 10;
+				//if (myCard[i].gradient_i == 0) {
+				//}
+			}
+			if (myCard[i].gradientColorChangeCount == 1)
+			{
+				sGradient.setColor(Color(255, 0, 255));
+			}
+			else if (myCard[i].gradientColorChangeCount == 11)
+			{
+				sGradient.setColor(Color(255, 255, 0));
+			}
+			else if (myCard[i].gradientColorChangeCount == 21)
+			{
+				sGradient.setColor(Color(0, 255, 255));
+			}
+			else if (myCard[i].gradientColorChangeCount == 31)
+			{
+				sGradient.setColor(Color(0, 0, 255));
+			}
+			else if (myCard[i].gradientColorChangeCount == 41)
+			{
+				sGradient.setColor(Color(0, 255, 0));
+			}
+			else if (myCard[i].gradientColorChangeCount == 51)
+			{
+				sGradient.setColor(Color(255, 0, 0));
+			}
+			else if (myCard[i].gradientColorChangeCount >= 61)
+			{
+				myCard[i].gradientColorChangeCount = 0;
+			}
 			if (i < myCard_num - 1) {
 				myCard[i].Rect.left = i * CARD_WIDTH / 2 + 300;
 				myCard[i].Rect.top = 750;
@@ -770,13 +961,24 @@ void UNO::Draw()
 				myCard[i].Rect.top = 750;
 				myCard[i].Rect.width = CARD_WIDTH;
 				myCard[i].Rect.height = CARD_HEIGHT;
+				//如果鼠标覆盖到牌上，则y坐标上移
 				if (myCard[i].mouseHover == true) {
 					myCard[i].Rect.top -= 40;
 				}
 			}
+
 			sCards.setTextureRect(sf::IntRect(myCard[i].card_y * CARD_WIDTH, myCard[i].card_x * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
 			sCards.setPosition(myCard[i].Rect.left, myCard[i].Rect.top);
 			window.draw(sCards);
+			if (myCard[i].card_x == buttonColorNum) {
+				//std::cout << "adw" << myCard[i].card_x << " " << buttonColorNum << std::endl;
+				sGradient.setPosition(myCard[i].Rect.left, myCard[i].Rect.top);
+				window.draw(sGradient);
+			}
+			else if (myCard[i].card_x == 4) {
+				sGradient.setPosition(myCard[i].Rect.left, myCard[i].Rect.top);
+				window.draw(sGradient);
+			}
 		}
 		//绘制enemy卡牌
 		for (int i = 0; i < enemyCard_num; i++) {
@@ -790,12 +992,16 @@ void UNO::Draw()
 		window.draw(sCards);
 		//摸牌的绘制
 		sCards.setTextureRect(sf::IntRect(cardPile_j * CARD_WIDTH, cardPile_i * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
-		sCards.setPosition(805, 420);
+		sCards.setPosition(CARDPILE_X, CARDPILE_Y);
 		cardPileIntRect.left = 805;
 		cardPileIntRect.top = 420;
 		cardPileIntRect.width = CARD_WIDTH;
 		cardPileIntRect.height = CARD_HEIGHT;
 		window.draw(sCards);
+
+		if (aCardFlag) {
+			CardAnimation(aCardX1, aCardY1, aCardX2, aCardY2, cardFlag);
+		}
 
 		changeTime2 = changeClock.getElapsedTime();
 		if (changecolorFlag == 1) {
@@ -814,7 +1020,7 @@ void UNO::Draw()
 		}
 		else if (changecolorFlag == 2) {
 			if (changeTime2.asSeconds() <= 2) {
-				std::cout << "绘制变换动画1" << std::endl;
+				//std::cout << "绘制变换动画1" << std::endl;
 				sChangeColorAnimation.setTextureRect(sf::IntRect(changeJ * 328, changeI * 315, 328, 315));
 				sChangeColorAnimation.setPosition(960 - 328 / 2, 540 - 315 / 2);
 				changeJ1 = changeJ1 + 5;
@@ -836,7 +1042,7 @@ void UNO::Draw()
 				window.draw(sChangeColorAnimation);
 			}
 			else if (changeTime2.asSeconds() <= 4) {
-				std::cout << "绘制变换动画2" << std::endl;
+				//std::cout << "绘制变换动画2" << std::endl;
 				switch (buttonColorNum)
 				{
 				case 0:
@@ -871,11 +1077,17 @@ void UNO::Draw()
 				changeScaleX = 1;
 				changeScaleY = 1;
 				changecolorFlag = 0;
+				GameFlag = 0;
 				ContinueTimer(COUNTDOWN_DURATION);
 				std::cout << "change" << changecolorFlag << std::endl;
 			}
 		}
+
+
 	}
+
+
+
 
 	//DrawButton();
 
@@ -886,7 +1098,130 @@ void UNO::Draw()
 	window.display();
 }
 
-void UNO::SendCard() {
+void UNO::CardAnimation(int x1, int y1, int x2, int y2, bool flag) {	//x1，y1是起始位置，x2，y2是终点位置，flag为1是摸牌，flag为0是出牌
+	CardTime2 = CardClock.getElapsedTime();
+	//std::cout << "aCardFlag:" << aCardFlag << "CardFlag:" << cardFlag << std::endl;
+	if (CardTime2.asSeconds() <= 2) {
+		if (cardFlag) {
+			if (cardFlag1) {
+				aCardX = aCardX + aCardDx;
+				aCardY = aCardY + aCardDy;
+				sCards.setTextureRect(sf::IntRect(cardPile_j * CARD_WIDTH, cardPile_i * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
+
+				//std::cout << "X:" << aCardX << " Y:" << aCardY << "dX:" << aCardDx << "dY:" << aCardDy << std::endl;
+
+				sCards.setPosition(aCardX, aCardY);
+				window.draw(sCards);
+			}
+			else {
+				aCardX = aCardX + aCardDx;
+				aCardY = aCardY + aCardDy;
+				sCards.setTextureRect(sf::IntRect(cardPile_j * CARD_WIDTH, cardPile_i * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
+				//std::cout << "X:" << aCardX << " Y:" << aCardY << "dX:" << aCardDx << "dY:" << aCardDy << std::endl;
+
+				sCards.setPosition(aCardX, aCardY);
+				window.draw(sCards);
+			}
+		}
+		else {
+			//std::cout << "X:" << aCardX << " Y:" << aCardY << "dX:" << aCardDx << "dY:" << aCardDy << std::endl;
+			if (cardFlag1) {
+				aCardX = aCardX + aCardDx;
+				aCardY = aCardY + aCardDy;
+				sCards.setTextureRect(sf::IntRect(sDiscardPile_j * CARD_WIDTH, sDiscardPile_i * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
+
+				//std::cout << "X:" << aCardX << " Y:" << aCardY << "dX:" << aCardDx << "dY:" << aCardDy << std::endl;
+
+				sCards.setPosition(aCardX, aCardY);
+				window.draw(sCards);
+			}
+			else {
+				aCardX = aCardX + aCardDx;
+				aCardY = aCardY + aCardDy;
+				sCards.setTextureRect(sf::IntRect(sDiscardPile_j * CARD_WIDTH, sDiscardPile_i * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
+				//std::cout << "X:" << aCardX << " Y:" << aCardY << "dX:" << aCardDx << "dY:" << aCardDy << std::endl;
+
+				sCards.setPosition(aCardX, aCardY);
+				window.draw(sCards);
+			}
+		}
+	}
+	else {
+		if (cardFlag)	//1为摸牌
+		{
+			if (cardFlag1) {
+				TouchingCard(myCard, myCard_num);
+				myCard_num++;
+				GameFlag = 0;
+				//ExamineCard(GameFlag);
+				countdownClock.restart();
+				ContinueTimer(durationTime);
+				aCardFlag--;
+			}
+			else
+			{
+				TouchingCard(enemyCard, enemyCard_num);
+				enemyCard_num++;
+				GameFlag = 1;
+				//ExamineCard(GameFlag);
+				countdownClock.restart();
+				ContinueTimer(durationTime);
+				aCardFlag--;
+			}
+		}
+		else	//0为出牌
+		{
+			if (cardFlag1) {
+				std::cout << "用户删卡" << std::endl;
+				DeleteCard(myCard, myCard_num, (aCardX1 - 300) / CARD_WIDTH * 2);
+				myCard_num--;
+				GameFlag = 0;
+
+				aCardFlag--;
+				ExamineCard(0);
+
+				countdownClock.restart();
+				ContinueTimer(durationTime);
+			}
+			else
+			{
+				std::cout << "电脑删卡" << std::endl;
+				DeleteCard(enemyCard, enemyCard_num, (aCardX1 - 300) / CARD_WIDTH * 2);
+				enemyCard_num--;
+				GameFlag = 1;
+
+
+				aCardFlag--;
+				ExamineCard(1);
+
+				countdownClock.restart();
+				ContinueTimer(durationTime);
+			}
+		}
+		ContinueTimer(COUNTDOWN_DURATION);
+
+		if (aCardFlag) {
+			if (cardFlag) {
+				CardClock.restart();
+				PauseTimer(remainingSeconds);
+				aCardX = aCardX1;
+				aCardY = aCardY1;
+				aCardX2 = (myCard_num)*CARD_WIDTH / 2 + 300;
+				aCardY2 = aCardY2;
+				aCardDx = (aCardX2 - aCardX1) / 2 / fps;
+				aCardDy = (aCardY2 - aCardY1) / 2 / fps;
+			}
+			else {
+
+			}
+		}
+		else {
+			if (changecolorFlag == 3) {
+				changecolorFlag = 1;
+				PauseTimer(remainingSeconds);
+			}
+		}
+	}
 
 }
 
@@ -905,10 +1240,6 @@ void UNO::DrawGameEnd()
 {
 
 }
-
-
-
-
 
 void UNO::Run()
 {
