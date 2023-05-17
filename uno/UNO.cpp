@@ -189,6 +189,18 @@ void UNO::LoadMesiaData()
 		std::cout << "Not find Font" << std::endl;
 	}
 
+	//加载游戏输赢版面
+	if (!tgameWin.loadFromFile("./data/images/gameWin.png"))
+	{
+		std::cout << "Not find gameWin.png";
+	}
+	sgameWin.setTexture(tgameWin);
+	if (!tgameLose.loadFromFile("./data/images/gameLose.png"))
+	{
+		std::cout << "Not find gameLose.png";
+	}
+	sgameLose.setTexture(tgameLose);
+
 	std::cout << "加载纹理已好" << std::endl;
 
 }
@@ -236,109 +248,124 @@ void UNO::Input()
 			window.close();	//窗口可以移动、调整大小和最小化。但是如果需要关闭，想要自己去调用close()函数
 			gameQuit = true;
 		}
+		if (event.type == sf::Event::EventType::KeyReleased && event.key.code == sf::Keyboard::Q)
+		{
+			gameOver = true;
+			isGameOverState = ncLOSE;
+		}
 
 		//鼠标交互（目前只设置了左右键单击）
 		//我的卡牌点击监听
 
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
 		{
-			std::cout << "Mouse::Left Pressed" << std::endl;
+			/*std::cout << "Mouse::Left Pressed" << std::endl;
 			std::cout << "Mouse.X:" << event.mouseButton.x << std::endl;
-			std::cout << "Mouse.Y:" << event.mouseButton.y << std::endl;
-			if (isGameOverState == ncNo) {
-				//音量按钮的检测
-				if (MusicIntRect.contains(event.mouseButton.x, event.mouseButton.y)) {
-					music_state = 1 - music_state;
-					std::cout << music_state << std::endl;
-					if (!music_state) {
-						StartMusic();
-					}
-					else {
-						StopMusic();
-					}
+			std::cout << "Mouse.Y:" << event.mouseButton.y << std::endl;*/
+		
+			//音量按钮的检测
+			if (MusicIntRect.contains(event.mouseButton.x, event.mouseButton.y)) {
+				music_state = 1 - music_state;
+				std::cout << music_state << std::endl;
+				if (!music_state) {
+					StartMusic();
+				}
+				else {
+					StopMusic();
 				}
 			}
 
-			if (GameFlag == 1 && aCardFlag == 0 && animationFlag == 0) {
-				//我的卡牌点击监听
-				for (int i = 0; i < myCard_num; i++) {
-					if (myCard[i].Rect.contains(event.mouseButton.x, event.mouseButton.y)) {
-						std::cout << aCardFlag << "用户出牌" << i << std::endl;
-						sDiscardPile_i = myCard[i].card_x;
-						sDiscardPile_j = myCard[i].card_y;
-						if (myCard[i].card_x == 4) {
+			if (isGameOverState == ncNo) {
 
+				if (GameFlag == 1 && aCardFlag == 0 && animationFlag == 0) {
+					//我的卡牌点击监听
+					for (int i = 0; i < myCard_num; i++) {
+						if (myCard[i].Rect.contains(event.mouseButton.x, event.mouseButton.y)) {
+							std::cout << aCardFlag << "用户出牌" << i << std::endl;
+							sDiscardPile_i = myCard[i].card_x;
+							sDiscardPile_j = myCard[i].card_y;
+							if (myCard[i].card_x == 4) {
+
+							}
+							else {
+								buttonColorNum = myCard[i].card_x;
+							}
+							//出牌的动画
+							if (aCardFlag == 0) {
+								std::cout << "用户出牌" << i << std::endl;
+								CardClock.restart();
+								aCardFlag = 1;
+								cardFlag = 0;
+								cardFlag1 = 1;
+								aCardX1 = i * CARD_WIDTH / 2 + 300;
+								aCardY1 = 750;
+								aCardX2 = SDISCARDPILE_X;
+								aCardY2 = SDISCARDPILE_Y;
+								aCardX = aCardX1;
+								aCardY = aCardY1;
+								aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
+								aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
+								PauseTimer(remainingSeconds);
+								std::cout << "aCardX" << aCardX << "aCardY" << aCardY << "aCardDx" << aCardDx << "aCradDy" << aCardDy << std::endl;
+							}
+
+							DeleteCard(myCard, myCard_num, i);
+							myCard_num--;
+							//切换成电脑操作
+							/*GameFlag = 0;
+
+							ExamineCard(0);
+
+
+							countdownClock.restart();*/
 						}
-						else {
-							buttonColorNum = myCard[i].card_x;
-						}
-						//出牌的动画
+
+					}
+					//摸牌的监听
+					if (cardPileIntRect.contains(event.mouseButton.x, event.mouseButton.y) && myCard_num < 24) {
+						std::cout << "用户摸牌" << std::endl;
+						//摸牌的动画
 						if (aCardFlag == 0) {
-							std::cout << "用户出牌" << i << std::endl;
 							CardClock.restart();
 							aCardFlag = 1;
-							cardFlag = 0;
+							cardFlag = 1;
 							cardFlag1 = 1;
-							aCardX1 = i * CARD_WIDTH / 2 + 300;
-							aCardY1 = 750;
-							aCardX2 = SDISCARDPILE_X;
-							aCardY2 = SDISCARDPILE_Y;
+							PauseTimer(remainingSeconds);
+							aCardX1 = CARDPILE_X;
+							aCardY1 = CARDPILE_Y;
 							aCardX = aCardX1;
 							aCardY = aCardY1;
+							aCardX2 = (myCard_num)*CARD_WIDTH / 2 + 300;
+							aCardY2 = 750;
 							aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
 							aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
-							PauseTimer(remainingSeconds);
-							std::cout << "aCardX" << aCardX << "aCardY" << aCardY << "aCardDx" << aCardDx << "aCradDy" << aCardDy << std::endl;
 						}
 
-						DeleteCard(myCard, myCard_num, i);
-						myCard_num--;
-						//切换成电脑操作
-						/*GameFlag = 0;
-
-						ExamineCard(0);
-
-
-						countdownClock.restart();*/
+						//TouchingCard(myCard, myCard_num);
+						//myCard_num++;
+						//切替换成电脑操作 
 					}
-
 				}
-				//摸牌的监听
-				if (cardPileIntRect.contains(event.mouseButton.x, event.mouseButton.y) && myCard_num < 24) {
-					std::cout << "用户摸牌" << std::endl;
-					//摸牌的动画
-					if (aCardFlag == 0) {
-						CardClock.restart();
-						aCardFlag = 1;
-						cardFlag = 1;
-						cardFlag1 = 1;
-						PauseTimer(remainingSeconds);
-						aCardX1 = CARDPILE_X;
-						aCardY1 = CARDPILE_Y;
-						aCardX = aCardX1;
-						aCardY = aCardY1;
-						aCardX2 = (myCard_num)*CARD_WIDTH / 2 + 300;
-						aCardY2 = 750;
-						aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
-						aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
-					}
+				if (animationFlag == 1 && GameFlag == 1 && aCardFlag == 0) {
+					for (int i = 0; i < 4; i++) {
+						if (RectColor[i].contains(event.mouseButton.x, event.mouseButton.y) && myCard_num < 24) {
+							animationFlag = 2;
+							changeClock.restart();
+							std::cout << "变换颜色" << i << "颜色逻辑" << animationFlag << std::endl;
+							buttonColorNum = i;
+						}
 
-					//TouchingCard(myCard, myCard_num);
-					//myCard_num++;
-					//切替换成电脑操作 
+					}
 				}
 			}
-			if (animationFlag == 1 && GameFlag == 1 && aCardFlag == 0) {
-				for (int i = 0; i < 4; i++) {
-					if (RectColor[i].contains(event.mouseButton.x, event.mouseButton.y) && myCard_num < 24) {
-						animationFlag = 2;
-						changeClock.restart();
-						std::cout << "变换颜色" << i << "颜色逻辑" << animationFlag << std::endl;
-						buttonColorNum = i;
-					}
-
-				}
+			else
+			{
+				//绘制游戏结束界面
+				DrawGameEnd();
 			}
+
+			
+
 		}
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
 		{
@@ -1393,12 +1420,70 @@ void UNO::GamePause() {
 
 void UNO::DrawGameEnd()
 {
+	Vector2i LeftCorner;
+	int PanelWidth = sgameWin.getLocalBounds().width;
+	int PanleHeight = sgameWin.getLocalBounds().height;
+	LeftCorner.x = (windowWidth - PanelWidth) / 2;
+	LeftCorner.y = (windowHeight - PanleHeight) / 2;
 
+	if (isGameOverState == ncWIN)
+	{
+		sgameWin.setPosition(LeftCorner.x, LeftCorner.y);
+		window.draw(sgameWin);
+	}
+	else if (isGameOverState == ncLOSE)
+	{
+		sgameLose.setPosition(LeftCorner.x, LeftCorner.y);
+		window.draw(sgameLose);
+	}
+	Vector2i score;
+	score.x = 337;
+	score.y = 223;
+	//用Text对象去显示score
+	int myScore = 0;
+	for (int i = 0; i < enemyCard_num; i++) {
+		if (enemyCard[i].card_x < 4 && enemyCard[i].card_y <= 9)
+		{
+			myScore += enemyCard[i].card_y * 1;
+		}
+		else if (enemyCard[i].card_x < 4 && enemyCard[i].card_y > 9)
+		{
+			if (enemyCard[i].card_y == 12)
+			{
+				myScore += 20;
+			}
+			else
+			{
+				myScore += 10;
+			}
+		}
+		else if (enemyCard[i].card_x == 4)
+		{
+			if (enemyCard[i].card_y == 0)
+			{
+				myScore += 10;
+			}
+			else if (enemyCard[i].card_y == 1)
+			{
+				myScore += 40;
+			}
+		}
+	
+	}
+	
+	std::string scoreString = std::to_string(static_cast<int>(myScore)); //将整数类型的myScore强制转换为字符串类型并赋值给scoreString变量
+	sf::Text scoreText(scoreString, font, 40);
+	scoreText.setPosition(score.x + LeftCorner.x, score.y + LeftCorner.y);
+	//scoreText.setOrigin(scoreText.getLocalBounds().width / 2.f, scoreText.getLocalBounds().height / 2.f);
+
+	window.draw(scoreText);
+	
+	window.display();
 }
 
 void UNO::Run()
 {
-	Initial();
+	//Initial();
 	LoadMusic();
 	StartMusic();
 	do
@@ -1412,6 +1497,28 @@ void UNO::Run()
 			Logic();
 
 			Draw();
+		}
+		DrawGameEnd();
+		while (gameOver)
+		{
+			Event e;
+			while (window.pollEvent(e))
+			{
+				if (e.type == Event::Closed)
+				{
+					window.close();
+					gameOver = false;
+					gameQuit = false;
+				}
+				if (e.type == Event::EventType::KeyReleased && e.key.code == Keyboard::Y)
+				{
+					gameOver = false;
+				}
+				if (e.type == Event::EventType::KeyReleased && e.key.code == Keyboard::N) {
+					gameOver = false;
+					gameQuit = true;
+				}
+			}
 		}
 	} while (!gameQuit && window.isOpen());
 

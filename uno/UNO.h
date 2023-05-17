@@ -125,6 +125,9 @@ public:
 	float time11;
 	float straScale = 1.5;
 
+	
+	
+
 	/////////纹理导入变量////////////////////////////////////////////////////////////////////////////////////////
 	sf::Texture tCards;				//卡牌纹理导入
 	sf::Sprite sCards;				//卡牌精灵对象
@@ -223,6 +226,18 @@ public:
 	//转换动画
 	sf::Texture tTran;
 	sf::Sprite sTran;
+
+	//游戏结束的输赢绘制
+	sf::Texture tgameWin;
+	sf::Sprite sgameWin;
+
+	sf::Texture tgameLose;
+	sf::Sprite sgameLose;
+
+	//重新开始游戏
+
+	//返回主页
+
 
 	///////////	///// /////////////////////////////////////////////////////////////////////////////////////////
 		//旧变量
