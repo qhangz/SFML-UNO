@@ -106,17 +106,24 @@ public:
 	int cardPile_i = 4, cardPile_j = 2;		//摸牌的地方
 	bool touchingFlag;		//摸牌的判断
 	bool showingFlag;		//出牌的判断
-	int changecolorFlag;	//判断此时是否需要进行颜色变换
 	int sendCardX, sendCardY;
 	int fps = 60;
 	int aCardFlag = 0;	//判断是否处于动画中
 	int cardFlag;	//判断是摸牌还是出牌 1为摸牌 0为出牌
 	int cardFlag1;	//判断是否是哪个摸牌，哪个出牌，1为用户，0为电脑
+	int cardFlag2;	//判断是主动摸牌还是被强制摸牌,1为主动，0为被动。
 	float aCardX1, aCardX2, aCardY1, aCardY2;
 	float aCardDx, aCardDy;
 	int click_state = 0;
+	int animationFlag;		//0为无操作，1为选择颜色，2为改换颜色动画播放，3为选择颜色前的摸牌动画，5为禁掉动画，7位转换动画
 
 	int touch_flag;
+	float banScale = 1;
+	float banScaleSpeed = 0.05;		//放大速度
+	float banScaleMax = 1.75;	//放大最大值
+	float traRotate = 8;	//旋转速度
+	float time11;
+	float straScale = 1.5;
 
 	/////////纹理导入变量////////////////////////////////////////////////////////////////////////////////////////
 	sf::Texture tCards;				//卡牌纹理导入
@@ -142,6 +149,10 @@ public:
 	sf::Clock clock;
 	sf::Time time1;
 	sf::Time time2;
+
+	sf::Clock BtClock;
+	sf::Time BtTime1;
+	sf::Time BtTime2;
 
 	//
 	sf::Clock computerClock;
@@ -177,6 +188,8 @@ public:
 	int mutexClock = 0;
 	int pauseClockFlag = 0;
 
+	float cardSpeed = 0.38;
+
 	//绘制变换颜色的动画的纹理素材导入
 	sf::Texture tChangeColorAnimation;
 	sf::Sprite sChangeColorAnimation;
@@ -203,7 +216,13 @@ public:
 	sf::Texture tGradient;
 	sf::Sprite sGradient;
 
+	//禁掉动画
+	sf::Texture tBan;
+	sf::Sprite sBan;
 
+	//转换动画
+	sf::Texture tTran;
+	sf::Sprite sTran;
 
 	///////////	///// /////////////////////////////////////////////////////////////////////////////////////////
 		//旧变量
