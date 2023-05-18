@@ -35,7 +35,8 @@ void UNO::Initial()
 
 	animationFlag = 0;	//变量为1时要进行游戏改变颜色
 
-	LoadMesiaData();
+	
+	InitialCard();
 }
 
 void UNO::InitialCard() {
@@ -201,6 +202,17 @@ void UNO::LoadMesiaData()
 	}
 	sgameLose.setTexture(tgameLose);
 
+	if (!tgameRestart.loadFromFile("./data/images/but_restart.png"))
+	{
+		std::cout << "Not find but_restart.png";
+	}
+	sgameRestart.setTexture(tgameRestart);
+	if (!thomePage.loadFromFile("./data/images/but_home.png"))
+	{
+		std::cout << "Not find but_home.png";
+	}
+	shomePage.setTexture(thomePage);
+
 	std::cout << "加载纹理已好" << std::endl;
 
 }
@@ -252,6 +264,7 @@ void UNO::Input()
 		{
 			gameOver = true;
 			isGameOverState = ncLOSE;
+			startBtn.btnState = 1;
 		}
 
 		//鼠标交互（目前只设置了左右键单击）
@@ -358,12 +371,6 @@ void UNO::Input()
 					}
 				}
 			}
-			else
-			{
-				//绘制游戏结束界面
-				DrawGameEnd();
-			}
-
 			
 
 		}
@@ -410,6 +417,7 @@ void UNO::Input()
 	//切换背景
 	if (!isGameBegin) {
 
+		
 		if (startBtn.CheckMouse(mousePosition, event) == 3) {
 
 			std::cout << "游戏中" << std::endl;
@@ -1216,8 +1224,8 @@ void UNO::Draw()
 	//DrawButton();
 
 
-	if (isGameOverState)
-		DrawGameEnd();
+	/*if (isGameOverState)
+		DrawGameEnd();*/
 
 	window.display();
 }
@@ -1426,6 +1434,7 @@ void UNO::DrawGameEnd()
 	LeftCorner.x = (windowWidth - PanelWidth) / 2;
 	LeftCorner.y = (windowHeight - PanleHeight) / 2;
 
+	//绘制游戏胜利或失败面板
 	if (isGameOverState == ncWIN)
 	{
 		sgameWin.setPosition(LeftCorner.x, LeftCorner.y);
@@ -1437,8 +1446,8 @@ void UNO::DrawGameEnd()
 		window.draw(sgameLose);
 	}
 	Vector2i score;
-	score.x = 337;
-	score.y = 223;
+	score.x = SCORE_X;
+	score.y = SCORE_Y;
 	//用Text对象去显示score
 	int myScore = 0;
 	for (int i = 0; i < enemyCard_num; i++) {
@@ -1474,52 +1483,119 @@ void UNO::DrawGameEnd()
 	std::string scoreString = std::to_string(static_cast<int>(myScore)); //将整数类型的myScore强制转换为字符串类型并赋值给scoreString变量
 	sf::Text scoreText(scoreString, font, 40);
 	scoreText.setPosition(score.x + LeftCorner.x, score.y + LeftCorner.y);
-	//scoreText.setOrigin(scoreText.getLocalBounds().width / 2.f, scoreText.getLocalBounds().height / 2.f);
-
 	window.draw(scoreText);
 	
+	//绘制游戏重新开始按钮
+	Vector2i btn;
+	btn.x = LeftCorner.x ;
+	btn.y = LeftCorner.y + PanleHeight;
+	btn.x += (PanelWidth - sgameRestart.getLocalBounds().width - shomePage.getLocalBounds().width) / 3;
+	sgameRestart.setPosition(btn.x, btn.y);
+	sgameRestart.setTextureRect(sf::IntRect(0, 0, sgameRestart.getLocalBounds().width, sgameRestart.getLocalBounds().height));
+	igameRestart.left = btn.x;
+	igameRestart.top = btn.y;
+	igameRestart.width = sgameRestart.getLocalBounds().width;
+	igameRestart.height = sgameRestart.getLocalBounds().height;
+	window.draw(sgameRestart);
+
+	//绘制返回主页的按钮
+	btn.x += (PanelWidth - sgameRestart.getLocalBounds().width - shomePage.getLocalBounds().width) / 3 + sgameRestart.getLocalBounds().width;
+	shomePage.setPosition(btn.x, btn.y);
+	shomePage.setTextureRect(sf::IntRect(0, 0, shomePage.getLocalBounds().width, shomePage.getLocalBounds().height));
+	ihomePage.left = btn.x;
+	ihomePage.top = btn.y;
+	ihomePage.width = shomePage.getLocalBounds().width;
+	ihomePage.height = shomePage.getLocalBounds().height;
+	window.draw(shomePage);
+
 	window.display();
+}
+
+void UNO::gameEndEvent()
+{
+	Event e;
+	while (window.pollEvent(e))
+	{
+		//鼠标左键事件
+		if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left)
+		{
+			//重新开始游戏按钮
+			if (igameRestart.contains(e.mouseButton.x, e.mouseButton.y))
+			{
+				isGameBegin = false;
+				isGameOverState = ncNo;
+				gameOver = false;
+				gameQuit = false;
+			}
+			// 返回主页按钮
+			if (ihomePage.contains(e.mouseButton.x, e.mouseButton.y))
+			{
+				isGameBegin = false;
+				isGameOverState = ncNo;
+				gameOver = false;
+			}
+			
+			//音量按钮的检测
+			if (MusicIntRect.contains(e.mouseButton.x, e.mouseButton.y)) {
+				music_state = 1 - music_state;
+				std::cout << music_state << std::endl;
+				if (!music_state) {
+					StartMusic();
+				}
+				else {
+					StopMusic();
+				}
+			}
+			//音乐按钮
+			MusicBtn.setTextureRect(sf::IntRect(music_state * 71, 0, 71, 71));
+			MusicBtn.setPosition(MUSIC_X, MUSIC_Y);
+			window.draw(MusicBtn);
+			DrawGameEnd();
+		}
+		
+		/*if (e.type == Event::EventType::KeyReleased && e.key.code == Keyboard::Y)
+		{
+			gameOver = false;
+		}*/
+		//可以通过点击取消和按下键盘Esc键退出游戏
+		if (e.type == sf::Event::Closed)
+		{
+			window.close();	//窗口可以移动、调整大小和最小化。但是如果需要关闭，想要自己去调用close()函数
+			gameQuit = true;
+		}
+		if (e.type == sf::Event::EventType::KeyReleased && e.key.code == sf::Keyboard::Escape)
+		{
+			window.close();	//窗口可以移动、调整大小和最小化。但是如果需要关闭，想要自己去调用close()函数
+			gameQuit = true;
+		}
+	}
 }
 
 void UNO::Run()
 {
-	//Initial();
+	LoadMesiaData();
 	LoadMusic();
 	StartMusic();
 	do
 	{
 		Initial();
+		
 		while (window.isOpen() && gameOver == false)
 		{
 
 			Input();
 
 			Logic();
-
+			//std::cout << isGameBegin;
 			Draw();
+
 		}
 		DrawGameEnd();
 		while (gameOver)
 		{
-			Event e;
-			while (window.pollEvent(e))
-			{
-				if (e.type == Event::Closed)
-				{
-					window.close();
-					gameOver = false;
-					gameQuit = false;
-				}
-				if (e.type == Event::EventType::KeyReleased && e.key.code == Keyboard::Y)
-				{
-					gameOver = false;
-				}
-				if (e.type == Event::EventType::KeyReleased && e.key.code == Keyboard::N) {
-					gameOver = false;
-					gameQuit = true;
-				}
-			}
+			gameEndEvent();
 		}
+		std::cout << isGameBegin;
 	} while (!gameQuit && window.isOpen());
 
 }

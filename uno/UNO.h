@@ -27,6 +27,9 @@ using namespace sf;
 //出牌位置
 #define SDISCARDPILE_X 961
 #define SDISCARDPILE_Y 420
+//score位置
+#define SCORE_X 337
+#define SCORE_Y 223
 
 
 //枚举定义游戏状态
@@ -235,8 +238,14 @@ public:
 	sf::Sprite sgameLose;
 
 	//重新开始游戏
+	sf::Texture tgameRestart;
+	sf::Sprite sgameRestart;
+	sf::IntRect igameRestart;
 
 	//返回主页
+	sf::Texture thomePage;
+	sf::Sprite shomePage;
+	sf::IntRect ihomePage;
 
 
 	///////////	///// /////////////////////////////////////////////////////////////////////////////////////////
@@ -286,6 +295,7 @@ public:
 	void CardAnimation(int x1, int y1, int x2, int y2, bool flag);	//绘制发牌动画函数
 	void DrawBan();		//绘制禁掉动画
 	void DrawTurn();	//绘制转换方向动画
+	void gameEndEvent();	//游戏结束后可执行的事件
 
 
 	void Draw();
