@@ -111,25 +111,26 @@ public:
 	bool showingFlag;		//出牌的判断
 	int sendCardX, sendCardY;
 	int fps = 60;
+
 	int aCardFlag = 0;	//判断是否处于动画中
 	int cardFlag;	//判断是摸牌还是出牌 1为摸牌 0为出牌
 	int cardFlag1;	//判断是否是哪个摸牌，哪个出牌，1为用户，0为电脑
 	int cardFlag2;	//判断是主动摸牌还是被强制摸牌,1为主动，0为被动。
+	int touchNum;
 	float aCardX1, aCardX2, aCardY1, aCardY2;
 	float aCardDx, aCardDy;
 	int click_state = 0;
 	int animationFlag;		//0为无操作，1为选择颜色，2为改换颜色动画播放，3为选择颜色前的摸牌动画，5为禁掉动画，7位转换动画
 
 	int touch_flag;
-	float banScale = 1;
+	float banScale = 1;		//禁掉动画放大背书
 	float banScaleSpeed = 0.05;		//放大速度
 	float banScaleMax = 1.75;	//放大最大值
 	float traRotate = 8;	//旋转速度
-	float time11;
-	float straScale = 1.5;
-
-	
-	
+	float straScale = 1.5;		//旋转放大倍数
+	int enemyCardCount[5];	//统计电脑卡牌里的各个卡牌颜色数量
+	int enemyCardMax = -1;	//记录电脑卡牌里的卡牌颜色数量最大值
+	int unoFlag;
 
 	/////////纹理导入变量////////////////////////////////////////////////////////////////////////////////////////
 	sf::Texture tCards;				//卡牌纹理导入
@@ -247,7 +248,6 @@ public:
 	sf::Sprite shomePage;
 	sf::IntRect ihomePage;
 
-
 	///////////	///// /////////////////////////////////////////////////////////////////////////////////////////
 		//旧变量
 
@@ -303,3 +303,4 @@ public:
 	void DrawGameEnd();
 
 };
+
