@@ -47,7 +47,7 @@ void UNO::InitialCard() {
 	int a;		//Ëæ»úÊý
 	int x, y;
 	myCard_num = 5;
-	enemyCard_num = 7;
+	enemyCard_num = 5;
 	for (int i = 0; i < myCard_num; i++) {
 		a = rand() % 54;
 		if (a < 52) {
@@ -367,7 +367,6 @@ void UNO::Input()
 							changeClock.restart();
 							std::cout << "±ä»»ÑÕÉ«" << i << "ÑÕÉ«Âß¼­" << animationFlag << std::endl;
 							buttonColorNum = i;
-							sDiscardPile_j = 15;
 						}
 
 					}
@@ -447,13 +446,15 @@ void UNO::Input()
 			isGameBegin = false;
 		}
 
-		if (UnoBtn.CheckMouse(mousePosition, event) == 3) {
+		if (UnoBtn.CheckMouse(mousePosition, event) == 3 && myCard_num == 1) {
 
 			UnoBtn.btnState = 1;
 			drawUnoFlag = true;
-			unoFlag = 1;
+			unoFlag = 0;
+
 			time1 = clock.restart();
 			std::cout << "Uno" << drawUnoFlag << std::endl;
+
 		}
 	}
 
@@ -534,6 +535,7 @@ void UNO::DrawTimer()
 		countdownClock.restart();
 		if (mutexClock == 0) {
 			COUNTDOWN_DURATION = durationTime;	//½«ÓÎÏ·»ØºÏÊ±¼äÖØÖÃ
+			remainingSeconds = durationTime;
 		}
 		remainingSeconds = COUNTDOWN_DURATION;
 	}
@@ -620,7 +622,7 @@ void UNO::Logic()
 			GameFlag = 1;
 
 		}
-		if (remainingSeconds < 7.1 && remainingSeconds > 6.9) {
+		if (remainingSeconds < 5.1 && remainingSeconds > 4.9) {
 			//std::cout << "remainingSeconds: " << remainingSeconds << std::endl;
 			ComputerLogic();
 		}
@@ -660,12 +662,10 @@ void UNO::ExamineCard(int i) {		//iÎª1ÊÇÓÃ»§±ä¿¨ÅÆ
 		if (sDiscardPile_i == 4 && sDiscardPile_j == 0) {		//±ä»»ÑÕÉ«¿¨ÅÆ
 			int a = enemyCardMax;
 			buttonColorNum = a;
-			sDiscardPile_j = 15;
 		}
 		else if (sDiscardPile_i == 4 && sDiscardPile_j == 1) {		//±ä»»ÑÕÉ«²¢¸ø¶Ô·½¼ÓËÄÕÅ¿¨ÅÆ
 			int a = rand() % 4;
 			buttonColorNum = a;
-			sDiscardPile_j = 15;
 			if (aCardFlag == 0) {
 				CardClock.restart();
 				PauseTimer(remainingSeconds);
@@ -1039,7 +1039,12 @@ void UNO::Draw()
 			}
 			else {
 				drawUnoFlag = false;
-				GameFlag = 0;
+				if (sDiscardPile_j == 11 || sDiscardPile_j == 12) {
+					GameFlag = 0;
+				}
+				else {
+					GameFlag = 1;
+				}
 				unoFlag = 3;
 				countdownClock.restart();
 			}
@@ -1125,14 +1130,14 @@ void UNO::Draw()
 				sGradient.setPosition(myCard[i].Rect.left, myCard[i].Rect.top);
 				window.draw(sGradient);
 			}
-			else if (myCard[i].card_y == sDiscardPile_j) {
+			else if (myCard[i].card_y == sDiscardPile_j && sDiscardPile_i != 4) {
 				sGradient.setPosition(myCard[i].Rect.left, myCard[i].Rect.top);
 				window.draw(sGradient);
 			}
 		}
 		//»æÖÆenemy¿¨ÅÆ
 		for (int i = 0; i < enemyCard_num; i++) {
-			sCards.setTextureRect(sf::IntRect(enemyCard[i].card_y * CARD_WIDTH, enemyCard[i].card_x * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
+			sCards.setTextureRect(sf::IntRect(2 * CARD_WIDTH, 4 * CARD_HEIGHT, CARD_WIDTH, CARD_HEIGHT));
 			sCards.setPosition(i * CARD_WIDTH / 2 + 300, 30);
 			window.draw(sCards);
 		}
@@ -1497,7 +1502,7 @@ void UNO::CardAnimation(int x1, int y1, int x2, int y2, bool flag) {	//x1£¬y1ÊÇÆ
 				//countdownClock.restart();
 
 				if (enemyCard_num == 1) {
-					unoFlag = 2;
+					unoFlag = 7;
 					ContinueTimer(COUNTDOWN_DURATION);
 					PauseTimer(remainingSeconds);
 				}
@@ -1541,15 +1546,29 @@ void UNO::CardAnimation(int x1, int y1, int x2, int y2, bool flag) {	//x1£¬y1ÊÇÆ
 
 		if (aCardFlag) {
 			if (cardFlag) {
-				CardClock.restart();
-				ContinueTimer(COUNTDOWN_DURATION);
-				PauseTimer(remainingSeconds);
-				aCardX = aCardX1;
-				aCardY = aCardY1;
-				aCardX2 = (myCard_num)*CARD_WIDTH / 2 + 300;
-				aCardY2 = aCardY2;
-				aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
-				aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
+				if (cardFlag1) {
+					CardClock.restart();
+					ContinueTimer(COUNTDOWN_DURATION);
+					PauseTimer(remainingSeconds);
+					aCardX = aCardX1;
+					aCardY = aCardY1;
+					aCardX2 = (myCard_num)*CARD_WIDTH / 2 + 300;
+					aCardY2 = aCardY2;
+					aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
+					aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
+				}
+				else {
+					CardClock.restart();
+					ContinueTimer(COUNTDOWN_DURATION);
+					PauseTimer(remainingSeconds);
+					aCardX = aCardX1;
+					aCardY = aCardY1;
+					aCardX2 = (enemyCard_num)*CARD_WIDTH / 2 + 300;
+					aCardY2 = aCardY2;
+					aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
+					aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
+				}
+
 			}
 			else {
 

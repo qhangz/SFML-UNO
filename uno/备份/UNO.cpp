@@ -23,19 +23,22 @@ void UNO::Initial()
 
 	GameFlag = 1;
 
-	myCard_num = 7;		//ÎÒµÄ¿¨ÅÆÊıÁ¿
+	myCard_num = 2;		//ÎÒµÄ¿¨ÅÆÊıÁ¿
 	enemyCard_num = 7;	//µĞ·½¿¨ÅÆÊıÁ¿
 
 	//music_state = 0;//ÒôÀÖ×´Ì¬
 
 	mutexClock = 0;
 
+	unoFlag = 0;	//ÓÃ»§ÊÇ·ñ°´ÏÂunoflag
+
+	buttonColorNum = 3;
+
 	isGameOverState = ncNo;	//³õÊ¼»¯ÓÎÏ·µÄ½áÊø×´Ì¬£¨Î´½áÊø£©
 	isGameBegin = false;	//³õÊ¼»¯ÓÎÏ·ÊÇ·ñ¿ªÊ¼
 
 	animationFlag = 0;	//±äÁ¿Îª1Ê±Òª½øĞĞÓÎÏ·¸Ä±äÑÕÉ«
 
-	
 	InitialCard();
 }
 
@@ -43,7 +46,7 @@ void UNO::InitialCard() {
 	srand(time(NULL));
 	int a;		//Ëæ»úÊı
 	int x, y;
-	myCard_num = 7;
+	myCard_num = 5;
 	enemyCard_num = 7;
 	for (int i = 0; i < myCard_num; i++) {
 		a = rand() % 54;
@@ -189,7 +192,6 @@ void UNO::LoadMesiaData()
 	{
 		std::cout << "Not find Font" << std::endl;
 	}
-
 	//¼ÓÔØÓÎÏ·ÊäÓ®°æÃæ
 	if (!tgameWin.loadFromFile("./data/images/gameWin.png"))
 	{
@@ -275,7 +277,6 @@ void UNO::Input()
 			/*std::cout << "Mouse::Left Pressed" << std::endl;
 			std::cout << "Mouse.X:" << event.mouseButton.x << std::endl;
 			std::cout << "Mouse.Y:" << event.mouseButton.y << std::endl;*/
-		
 			//ÒôÁ¿°´Å¥µÄ¼ì²â
 			if (MusicIntRect.contains(event.mouseButton.x, event.mouseButton.y)) {
 				music_state = 1 - music_state;
@@ -287,52 +288,52 @@ void UNO::Input()
 					StopMusic();
 				}
 			}
-
 			if (isGameOverState == ncNo) {
-
+				std::cout << GameFlag << "gan" << std::endl;
 				if (GameFlag == 1 && aCardFlag == 0 && animationFlag == 0) {
 					//ÎÒµÄ¿¨ÅÆµã»÷¼àÌı
 					for (int i = 0; i < myCard_num; i++) {
-						if (myCard[i].Rect.contains(event.mouseButton.x, event.mouseButton.y)) {
-							std::cout << aCardFlag << "ÓÃ»§³öÅÆ" << i << std::endl;
-							sDiscardPile_i = myCard[i].card_x;
-							sDiscardPile_j = myCard[i].card_y;
-							if (myCard[i].card_x == 4) {
+						if (myCard[i].card_x == buttonColorNum || myCard[i].card_x == 4 || myCard[i].card_y == sDiscardPile_j) {
+							if (myCard[i].Rect.contains(event.mouseButton.x, event.mouseButton.y)) {
+								//std::cout << aCardFlag << "ÓÃ»§³öÅÆ" << i << std::endl;
+								sDiscardPile_i = myCard[i].card_x;
+								sDiscardPile_j = myCard[i].card_y;
+								if (myCard[i].card_x == 4) {
 
+								}
+								else {
+									buttonColorNum = myCard[i].card_x;
+								}
+								//³öÅÆµÄ¶¯»­
+								if (aCardFlag == 0) {
+									std::cout << "ÓÃ»§³öÅÆ" << i << std::endl;
+									CardClock.restart();
+									aCardFlag = 1;
+									cardFlag = 0;
+									cardFlag1 = 1;
+									aCardX1 = i * CARD_WIDTH / 2 + 300;
+									aCardY1 = 750;
+									aCardX2 = SDISCARDPILE_X;
+									aCardY2 = SDISCARDPILE_Y;
+									aCardX = aCardX1;
+									aCardY = aCardY1;
+									aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
+									aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
+									PauseTimer(remainingSeconds);
+									std::cout << "aCardX" << aCardX << "aCardY" << aCardY << "aCardDx" << aCardDx << "aCradDy" << aCardDy << std::endl;
+								}
+
+								DeleteCard(myCard, myCard_num, i);
+								myCard_num--;
+								//ÇĞ»»³ÉµçÄÔ²Ù×÷
+								/*GameFlag = 0;
+
+								ExamineCard(0);
+
+
+								countdownClock.restart();*/
 							}
-							else {
-								buttonColorNum = myCard[i].card_x;
-							}
-							//³öÅÆµÄ¶¯»­
-							if (aCardFlag == 0) {
-								std::cout << "ÓÃ»§³öÅÆ" << i << std::endl;
-								CardClock.restart();
-								aCardFlag = 1;
-								cardFlag = 0;
-								cardFlag1 = 1;
-								aCardX1 = i * CARD_WIDTH / 2 + 300;
-								aCardY1 = 750;
-								aCardX2 = SDISCARDPILE_X;
-								aCardY2 = SDISCARDPILE_Y;
-								aCardX = aCardX1;
-								aCardY = aCardY1;
-								aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
-								aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
-								PauseTimer(remainingSeconds);
-								std::cout << "aCardX" << aCardX << "aCardY" << aCardY << "aCardDx" << aCardDx << "aCradDy" << aCardDy << std::endl;
-							}
-
-							DeleteCard(myCard, myCard_num, i);
-							myCard_num--;
-							//ÇĞ»»³ÉµçÄÔ²Ù×÷
-							/*GameFlag = 0;
-
-							ExamineCard(0);
-
-
-							countdownClock.restart();*/
 						}
-
 					}
 					//ÃşÅÆµÄ¼àÌı
 					if (cardPileIntRect.contains(event.mouseButton.x, event.mouseButton.y) && myCard_num < 24) {
@@ -353,7 +354,7 @@ void UNO::Input()
 							aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
 							aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
 						}
-
+						cardFlag2 = 1;
 						//TouchingCard(myCard, myCard_num);
 						//myCard_num++;
 						//ÇĞÌæ»»³ÉµçÄÔ²Ù×÷ 
@@ -366,12 +367,13 @@ void UNO::Input()
 							changeClock.restart();
 							std::cout << "±ä»»ÑÕÉ«" << i << "ÑÕÉ«Âß¼­" << animationFlag << std::endl;
 							buttonColorNum = i;
+							sDiscardPile_j = 15;
 						}
 
 					}
 				}
 			}
-			
+
 
 		}
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
@@ -405,6 +407,7 @@ void UNO::Input()
 		//Êó±êÓÒ¼ü
 		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
 		{
+
 			RButtonDown(Mouse::getPosition(window));	//Êó±êµ¥»÷
 
 		}
@@ -417,16 +420,17 @@ void UNO::Input()
 	//ÇĞ»»±³¾°
 	if (!isGameBegin) {
 
-		
 		if (startBtn.CheckMouse(mousePosition, event) == 3) {
 
 			std::cout << "ÓÎÏ·ÖĞ" << std::endl;
 			InitialCard();
 			DrawDealCard();
 			isGameBegin = true;
+			unoFlag = 0;
 			exitBtn.btnState = 1;
 			countdownClock.restart();
 			GameFlag = 1;
+
 		}
 
 
@@ -447,6 +451,7 @@ void UNO::Input()
 
 			UnoBtn.btnState = 1;
 			drawUnoFlag = true;
+			unoFlag = 1;
 			time1 = clock.restart();
 			std::cout << "Uno" << drawUnoFlag << std::endl;
 		}
@@ -514,12 +519,15 @@ void UNO::DrawTimer()
 		//ĞŞ¸ÄGameFlag
 		if (GameFlag == 0)
 		{
+
 			GameFlag = 1;
 
 		}
 		else
 		{
+
 			GameFlag = 0;
+
 		}
 
 		//ÖØĞÂ¿ªÊ¼µ¹¼ÆÊ±
@@ -534,10 +542,22 @@ void UNO::DrawTimer()
 	std::string countdownString = std::to_string(static_cast<int>(remainingSeconds)); //½«ÕûÊıÀàĞÍµÄremainingSecondsÇ¿ÖÆ×ª»»Îª×Ö·û´®ÀàĞÍ²¢¸³Öµ¸øcountdownString±äÁ¿
 	if (GameFlag == 0)
 	{
+		/*if (animationFlag == 3) {
+			countdownString = "Player Remaining:  " + countdownString;
+		}
+		else {
+			countdownString = "Computer Remaining:  " + countdownString;
+		}*/
 		countdownString = "Computer Remaining:  " + countdownString;
 	}
 	else
 	{
+		/*if (animationFlag == 3) {
+			countdownString = "Computer Remaining:  " + countdownString;
+		}
+		else {
+			countdownString = "Player Remaining:  " + countdownString;
+		}*/
 		countdownString = "Player Remaining:  " + countdownString;
 	}
 
@@ -578,15 +598,42 @@ void UNO::Logic()
 			ComputerLogic();
 		}*/
 		//std::cout << "remainingSeconds: " << remainingSeconds << std::endl;
+		if (unoFlag == 1) {
+
+		}
+		else if (unoFlag == 2) {
+			CardClock.restart();
+			PauseTimer(remainingSeconds);
+			aCardFlag = 2;
+			cardFlag1 = 1;
+			//cardFlag2 = 1;
+			cardFlag = 1;
+			CardClock.restart();
+			aCardX1 = CARDPILE_X;
+			aCardY1 = CARDPILE_Y + 30;
+			aCardX = aCardX1;
+			aCardY = aCardY1;
+			aCardX2 = (myCard_num)*CARD_WIDTH / 2 + 300;
+			aCardY2 = 750;
+			aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
+			aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
+			GameFlag = 1;
+
+		}
 		if (remainingSeconds < 7.1 && remainingSeconds > 6.9) {
 			//std::cout << "remainingSeconds: " << remainingSeconds << std::endl;
 			ComputerLogic();
 		}
 	}
 	else {			//ÓÃ»§²Ù×÷Âß¼­ÅĞ¶Ï
+
 		PlayerLogic();
 
 	}
+
+
+
+
 }
 
 void UNO::isMouseHover(Vector2i mPoint)
@@ -611,17 +658,21 @@ void UNO::isMouseHover(Vector2i mPoint)
 void UNO::ExamineCard(int i) {		//iÎª1ÊÇÓÃ»§±ä¿¨ÅÆ
 	if (i && aCardFlag == 0) {
 		if (sDiscardPile_i == 4 && sDiscardPile_j == 0) {		//±ä»»ÑÕÉ«¿¨ÅÆ
-			int a = rand() % 4;
+			int a = enemyCardMax;
 			buttonColorNum = a;
+			sDiscardPile_j = 15;
 		}
 		else if (sDiscardPile_i == 4 && sDiscardPile_j == 1) {		//±ä»»ÑÕÉ«²¢¸ø¶Ô·½¼ÓËÄÕÅ¿¨ÅÆ
 			int a = rand() % 4;
 			buttonColorNum = a;
+			sDiscardPile_j = 15;
 			if (aCardFlag == 0) {
 				CardClock.restart();
 				PauseTimer(remainingSeconds);
 				aCardFlag = 4;
-				cardFlag2 = 1;
+				//cardFlag2 = 1;
+				GameFlag = 1;
+				touchNum = 1;
 				cardFlag1 = 1;
 				cardFlag = 1;
 				CardClock.restart();
@@ -655,7 +706,7 @@ void UNO::ExamineCard(int i) {		//iÎª1ÊÇÓÃ»§±ä¿¨ÅÆ
 				PauseTimer(remainingSeconds);
 				aCardFlag = 2;
 				cardFlag1 = 1;
-				cardFlag2 = 1;
+				//cardFlag2 = 1;
 				cardFlag = 1;
 				CardClock.restart();
 				aCardX1 = CARDPILE_X;
@@ -682,7 +733,9 @@ void UNO::ExamineCard(int i) {		//iÎª1ÊÇÓÃ»§±ä¿¨ÅÆ
 				PauseTimer(remainingSeconds);
 				aCardFlag = 4;
 				cardFlag1 = 0;
-				cardFlag2 = 1;
+				GameFlag = 0;
+				//cardFlag2 = 1;
+				touchNum = 1;
 				cardFlag = 1;
 				CardClock.restart();
 				aCardX1 = CARDPILE_X;
@@ -715,7 +768,7 @@ void UNO::ExamineCard(int i) {		//iÎª1ÊÇÓÃ»§±ä¿¨ÅÆ
 				PauseTimer(remainingSeconds);
 				aCardFlag = 2;
 				cardFlag1 = 0;
-				cardFlag2 = 1;
+				//cardFlag2 = 1;
 				cardFlag = 1;
 				CardClock.restart();
 				aCardX1 = CARDPILE_X;
@@ -737,6 +790,24 @@ void UNO::ComputerLogic()
 {
 	//ÖØÖÃ»ØºÏÊ±¼ä
 	//countdownClock.restart();
+	int max = -1;
+	for (int i = 0; i < enemyCard_num; i++) {
+		enemyCardCount[enemyCard[i].card_x] = 0;
+	}
+	for (int i = 0; i < enemyCard_num; i++) {
+		enemyCardCount[enemyCard[i].card_x] += 1;
+		if (enemyCardCount[enemyCard[i].card_x] > max) {
+			if (enemyCard[i].card_x > 3) {
+
+			}
+			else {
+				enemyCardMax = enemyCard[i].card_x;
+				max = enemyCardCount[enemyCard[i].card_x];
+			}
+		}
+	}
+	std::cout << "max" << enemyCardMax << std::endl;
+
 	//ÉùÃ÷ÕâÊÇcomputerµÄ»ØºÏ
 	touch_flag = 1;
 	std::cout << buttonColorNum << std::endl;
@@ -862,7 +933,7 @@ void UNO::ComputerLogic()
 			aCardDx = (aCardX2 - aCardX1) / cardSpeed / fps;
 			aCardDy = (aCardY2 - aCardY1) / cardSpeed / fps;
 		}
-
+		cardFlag2 = 1;
 		//ÇĞÌæ»»³ÉµçÄÔ²Ù×÷ 
 		GameFlag = 1;
 		//ExamineCard(GameFlag);
@@ -959,15 +1030,18 @@ void UNO::Draw()
 		//uno°´Å¥
 		UnoBtn.setPosition(1140, 556);
 		window.draw(UnoBtn);
-
+		//std::cout << "remain" << remainingSeconds << std::endl;
 		if (drawUnoFlag == true) {
 			time2 = clock.getElapsedTime();
-			if (time2.asSeconds() <= 3) {
+			if (time2.asSeconds() <= 1) {
 				sUno_cloud.setPosition(1240, 556 - 150);
 				window.draw(sUno_cloud);
 			}
 			else {
 				drawUnoFlag = false;
+				GameFlag = 0;
+				unoFlag = 3;
+				countdownClock.restart();
 			}
 		}
 		else {
@@ -1051,6 +1125,10 @@ void UNO::Draw()
 				sGradient.setPosition(myCard[i].Rect.left, myCard[i].Rect.top);
 				window.draw(sGradient);
 			}
+			else if (myCard[i].card_y == sDiscardPile_j) {
+				sGradient.setPosition(myCard[i].Rect.left, myCard[i].Rect.top);
+				window.draw(sGradient);
+			}
 		}
 		//»æÖÆenemy¿¨ÅÆ
 		for (int i = 0; i < enemyCard_num; i++) {
@@ -1070,7 +1148,7 @@ void UNO::Draw()
 		cardPileIntRect.width = CARD_WIDTH;
 		cardPileIntRect.height = CARD_HEIGHT;
 		window.draw(sCards);
-
+		//std::cout << "aCardFlag" << aCardFlag << std::endl;
 		if (aCardFlag) {
 			CardAnimation(aCardX1, aCardY1, aCardX2, aCardY2, cardFlag);
 		}
@@ -1152,9 +1230,9 @@ void UNO::Draw()
 				changeJ = 0;
 				changeScaleX = 1;
 				changeScaleY = 1;
-				animationFlag = 0;
 				GameFlag = 0;
-				ContinueTimer(COUNTDOWN_DURATION);
+				animationFlag = 0;
+				ContinueTimer(durationTime);
 				std::cout << "change" << animationFlag << std::endl;
 			}
 		}
@@ -1189,7 +1267,7 @@ void UNO::Draw()
 			}
 		}
 		else if (animationFlag == 8) {	//×ª»»Ë³Ğò¶¯»­
-			if (BtTime2.asSeconds() <= 1.5) {
+			if (BtTime2.asSeconds() <= 0.75) {
 
 				sTran.setOrigin(146, 150);
 				sTran.setPosition(960, 540);
@@ -1198,7 +1276,7 @@ void UNO::Draw()
 				sTran.rotate(traRotate);
 				window.draw(sTran);
 			}
-			else if (BtTime2.asSeconds() <= 3) {
+			else if (BtTime2.asSeconds() <= 1.5) {
 
 				//sTran.setOrigin(146, 150);
 				sTran.setPosition(960, 540);
@@ -1224,8 +1302,8 @@ void UNO::Draw()
 	//DrawButton();
 
 
-	/*if (isGameOverState)
-		DrawGameEnd();*/
+	if (isGameOverState)
+		DrawGameEnd();
 
 	window.display();
 }
@@ -1284,70 +1362,128 @@ void UNO::CardAnimation(int x1, int y1, int x2, int y2, bool flag) {	//x1£¬y1ÊÇÆ
 			if (cardFlag1) {
 				TouchingCard(myCard, myCard_num);
 				myCard_num++;
-				//GameFlag = 1;
-				if (cardFlag2) {
+				aCardFlag--;
+				GameFlag = 1;
+				if (aCardFlag == 0 && cardFlag2 == 1) {
 					GameFlag = 0;
-					cardFlag2 = 1;
+				}
+				if (animationFlag == 3) {
+					GameFlag = 0;
+				}
+				if (myCard_num == 1) {
+					unoFlag = 3;
+					GameFlag = 1;
+				}
+				if (unoFlag == 2 && aCardFlag == 0) {
+					unoFlag = 0;
+					GameFlag = 0;
+				}
+				cardFlag2--;
+				/*if (cardFlag2 && aCardFlag == 0) {
+					GameFlag = 0;
+					cardFlag2 = 0;
 				}
 				else {
 					GameFlag = 1;
-				}
+				}*/
 				//ExamineCard(GameFlag);
 				countdownClock.restart();
 				ContinueTimer(durationTime);
-				aCardFlag--;
+
 			}
 			else
 			{
 				TouchingCard(enemyCard, enemyCard_num);
 				enemyCard_num++;
-				//GameFlag = 0;
-				if (cardFlag2) {
+				GameFlag = 0;
+				aCardFlag--;
+
+				if (aCardFlag == 0 && cardFlag2 == 1) {
+					GameFlag = 1;
+				}
+
+				if (animationFlag == 3) {
+					GameFlag = 1;
+				}
+
+				if (myCard_num == 1) {
+					unoFlag = 3;
+					GameFlag = 1;
+				}
+
+				cardFlag2--;
+
+				/*if (cardFlag2 && aCardFlag == 0) {
 					GameFlag = 1;
 					cardFlag2 = 0;
 				}
-				else {
+				else if (aCardFlag == 0) {
 					GameFlag = 0;
-				}
+					cardFlag2 = 1;
+				}*/
 				//ExamineCard(GameFlag);
+
 				countdownClock.restart();
 				ContinueTimer(durationTime);
-				aCardFlag--;
+
 			}
 		}
 		else	//0Îª³öÅÆ
 		{
 			if (cardFlag1) {
 				std::cout << "ÓÃ»§É¾¿¨" << std::endl;
+
 				/*DeleteCard(myCard, myCard_num, (aCardX1 - 300) / CARD_WIDTH * 2);
 				myCard_num--;*/
 				//GameFlag = 0;
 
 				aCardFlag--;
 				ExamineCard(0);
+				//ContinueTimer(durationTime);
 
 				if (animationFlag == 5) {
 					animationFlag = 6;
 					GameFlag = 1;
+					if (myCard_num == 1) {
+						unoFlag = 3;
+						ContinueTimer(COUNTDOWN_DURATION);
+					}
 					BtClock.restart();
 					PauseTimer(remainingSeconds);
 				}
 				else if (animationFlag == 7) {
 					animationFlag = 8;
 					GameFlag = 1;
+					if (myCard_num == 1) {
+						unoFlag = 3;
+						ContinueTimer(COUNTDOWN_DURATION);
+					}
 					BtClock.restart();
 					PauseTimer(remainingSeconds);
 				}
 				else if (animationFlag == 3) {
 					GameFlag = 1;
+					if (myCard_num == 1) {
+						unoFlag = 3;
+						ContinueTimer(COUNTDOWN_DURATION);
+					}
 				}
 				else {
 					GameFlag = 0;
-					ContinueTimer(durationTime);
+					if (myCard_num == 1) {
+						unoFlag = 3;
+						ContinueTimer(COUNTDOWN_DURATION);
+					}
+					else {
+						ContinueTimer(durationTime);
+					}
 				}
 
+
+
+
 				countdownClock.restart();
-				ContinueTimer(durationTime);
+				//ContinueTimer(durationTime);
 			}
 			else
 			{
@@ -1355,36 +1491,49 @@ void UNO::CardAnimation(int x1, int y1, int x2, int y2, bool flag) {	//x1£¬y1ÊÇÆ
 				/*DeleteCard(enemyCard, enemyCard_num, (aCardX1 - 300) / CARD_WIDTH * 2);
 				enemyCard_num--;*/
 
-
-
 				aCardFlag--;
 				ExamineCard(1);
-
+				//ContinueTimer(durationTime);
 				//countdownClock.restart();
 
-				if (animationFlag == 5) {
+				if (enemyCard_num == 1) {
+					unoFlag = 2;
 					ContinueTimer(COUNTDOWN_DURATION);
-					animationFlag = 6;
-					GameFlag = 0;
-					BtClock.restart();
-					std::cout << "animationBan" << animationFlag << std::endl;
-					PauseTimer(remainingSeconds);
-				}
-				else if (animationFlag == 7) {
-					ContinueTimer(COUNTDOWN_DURATION);
-					animationFlag = 8;
-					GameFlag = 0;
-					BtClock.restart();
-					std::cout << "animationBan" << animationFlag << std::endl;
 					PauseTimer(remainingSeconds);
 				}
 				else {
-					GameFlag = 1;
-					ContinueTimer(durationTime);
+					if (animationFlag == 5) {
+						ContinueTimer(durationTime);
+						animationFlag = 6;
+						GameFlag = 0;
+						BtClock.restart();
+
+						//COUNTDOWN_DURATION = 10.f;
+
+						std::cout << "animationBan" << animationFlag << std::endl;
+						PauseTimer(durationTime);
+						remainingSeconds = 10.f;
+
+					}
+					else if (animationFlag == 7) {
+						ContinueTimer(durationTime);
+						animationFlag = 8;
+						GameFlag = 0;
+						BtClock.restart();
+
+						std::cout << "animationBan" << animationFlag << std::endl;
+						PauseTimer(durationTime);
+						remainingSeconds = 10.f;
+					}
+					else {
+						GameFlag = 1;
+						ContinueTimer(durationTime);
+
+					}
 				}
 
 				countdownClock.restart();
-				ContinueTimer(durationTime);
+				//ContinueTimer(durationTime);
 
 			}
 		}
@@ -1393,6 +1542,7 @@ void UNO::CardAnimation(int x1, int y1, int x2, int y2, bool flag) {	//x1£¬y1ÊÇÆ
 		if (aCardFlag) {
 			if (cardFlag) {
 				CardClock.restart();
+				ContinueTimer(COUNTDOWN_DURATION);
 				PauseTimer(remainingSeconds);
 				aCardX = aCardX1;
 				aCardY = aCardY1;
@@ -1408,7 +1558,24 @@ void UNO::CardAnimation(int x1, int y1, int x2, int y2, bool flag) {	//x1£¬y1ÊÇÆ
 		else {
 			if (animationFlag == 3) {
 				animationFlag = 1;
+				GameFlag = 1;
 				PauseTimer(remainingSeconds);
+			}
+			if (unoFlag == 3) {
+				unoFlag = 2;
+				GameFlag = 1;
+				//ContinueTimer(COUNTDOWN_DURATION);
+				//PauseTimer(COUNTDOWN_DURATION);
+			}
+			if (myCard_num == 0) {
+				isGameOverState = ncWIN;
+				gameOver = true;
+				startBtn.btnState = 1;
+			}
+			else if (enemyCard_num == 0) {
+				isGameOverState = ncLOSE;
+				gameOver = true;
+				startBtn.btnState = 1;
 			}
 		}
 	}
@@ -1425,6 +1592,7 @@ void UNO::DrawTurn() {
 void UNO::GamePause() {
 
 }
+
 
 void UNO::DrawGameEnd()
 {
@@ -1477,17 +1645,17 @@ void UNO::DrawGameEnd()
 				myScore += 40;
 			}
 		}
-	
+
 	}
-	
+
 	std::string scoreString = std::to_string(static_cast<int>(myScore)); //½«ÕûÊıÀàĞÍµÄmyScoreÇ¿ÖÆ×ª»»Îª×Ö·û´®ÀàĞÍ²¢¸³Öµ¸øscoreString±äÁ¿
 	sf::Text scoreText(scoreString, font, 40);
 	scoreText.setPosition(score.x + LeftCorner.x, score.y + LeftCorner.y);
 	window.draw(scoreText);
-	
+
 	//»æÖÆÓÎÏ·ÖØĞÂ¿ªÊ¼°´Å¥
 	Vector2i btn;
-	btn.x = LeftCorner.x ;
+	btn.x = LeftCorner.x;
 	btn.y = LeftCorner.y + PanleHeight;
 	btn.x += (PanelWidth - sgameRestart.getLocalBounds().width - shomePage.getLocalBounds().width) / 3;
 	sgameRestart.setPosition(btn.x, btn.y);
@@ -1534,7 +1702,7 @@ void UNO::gameEndEvent()
 				isGameOverState = ncNo;
 				gameOver = false;
 			}
-			
+
 			//ÒôÁ¿°´Å¥µÄ¼ì²â
 			if (MusicIntRect.contains(e.mouseButton.x, e.mouseButton.y)) {
 				music_state = 1 - music_state;
@@ -1552,11 +1720,8 @@ void UNO::gameEndEvent()
 			window.draw(MusicBtn);
 			DrawGameEnd();
 		}
-		
-		/*if (e.type == Event::EventType::KeyReleased && e.key.code == Keyboard::Y)
-		{
-			gameOver = false;
-		}*/
+
+
 		//¿ÉÒÔÍ¨¹ıµã»÷È¡ÏûºÍ°´ÏÂ¼üÅÌEsc¼üÍË³öÓÎÏ·
 		if (e.type == sf::Event::Closed)
 		{
@@ -1579,14 +1744,14 @@ void UNO::Run()
 	do
 	{
 		Initial();
-		
+
 		while (window.isOpen() && gameOver == false)
 		{
 
 			Input();
 
 			Logic();
-			//std::cout << isGameBegin;
+
 			Draw();
 
 		}
@@ -1595,7 +1760,7 @@ void UNO::Run()
 		{
 			gameEndEvent();
 		}
-		std::cout << isGameBegin;
+
 	} while (!gameQuit && window.isOpen());
 
 }

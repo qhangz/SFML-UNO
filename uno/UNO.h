@@ -130,7 +130,7 @@ public:
 	float straScale = 1.5;		//旋转放大倍数
 	int enemyCardCount[5];	//统计电脑卡牌里的各个卡牌颜色数量
 	int enemyCardMax = -1;	//记录电脑卡牌里的卡牌颜色数量最大值
-	int unoFlag;
+	int unoFlag;	//判断是否按下uno按钮的 
 
 	/////////纹理导入变量////////////////////////////////////////////////////////////////////////////////////////
 	sf::Texture tCards;				//卡牌纹理导入
@@ -183,7 +183,7 @@ public:
 	sf::IntRect cardPileIntRect;
 
 	//用于游戏回合内的倒计时 
-	float durationTime = 10.f;	//初始设置的游戏回合时间设为10秒
+	float durationTime = 8.f;	//初始设置的游戏回合时间设为10秒
 	float COUNTDOWN_DURATION = durationTime;	//游戏回合时间，用于动态增加
 	sf::Clock countdownClock;
 	sf::Clock pauseClock;	//用于暂停游戏计时	
