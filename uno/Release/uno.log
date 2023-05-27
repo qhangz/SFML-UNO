@@ -1,0 +1,237 @@
+﻿  Button.cpp
+D:\work\gameprogram\SFML_UNO\uno\Button.cpp(96,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\Button.cpp(96,30): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  Game.cpp
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(41,2): warning C4091: “typedef ”: 没有声明变量时忽略“GAMEOVERSTATE”的左侧
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(127): warning C4305: “初始化”: 从“double”到“float”截断
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(198): warning C4305: “初始化”: 从“double”到“float”截断
+  UNO.cpp
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(41,2): warning C4091: “typedef ”: 没有声明变量时忽略“GAMEOVERSTATE”的左侧
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(127): warning C4305: “初始化”: 从“double”到“float”截断
+D:\work\gameprogram\SFML_UNO\uno\UNO.h(198): warning C4305: “初始化”: 从“double”到“float”截断
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(46,12): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(314,39): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(352,46): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(465,9): warning C4101: “j”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(465,6): warning C4101: “i”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(493,9): warning C4101: “j”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(493,6): warning C4101: “i”: 未引用的局部变量
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(618,42): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(683,46): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(716,46): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(745,43): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(778,43): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(834,34): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(869,34): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(901,34): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(931,45): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1034,22): warning C4805: “==”: 在操作中将类型“int”与类型“bool”混合不安全
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1122,58): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1122,37): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1126,62): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1126,41): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1130,62): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1130,41): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1134,62): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1134,41): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1141,42): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1158,45): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1158,36): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1158,27): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1158,18): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1171,43): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1174,47): warning C4244: “=”: 从“double”转换到“T”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1228,50): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1228,36): warning C4244: “参数”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1229,33): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1230,33): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1555,44): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1566,47): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1619,17): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1620,18): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1627,48): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1627,34): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1632,49): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1632,35): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1672,56): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1672,32): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1679,97): warning C4244: “+=”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1680,37): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1680,30): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1681,114): warning C4244: “参数”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1681,77): warning C4244: “参数”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1684,52): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1685,53): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1689,101): warning C4244: “+=”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1690,34): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1690,27): warning C4244: “参数”: 从“T”转换到“float”，可能丢失数据
+          with
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1691,105): warning C4244: “参数”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1691,71): warning C4244: “参数”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1694,46): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+D:\work\gameprogram\SFML_UNO\uno\UNO.cpp(1695,47): warning C4244: “=”: 从“T”转换到“T”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+UNO.obj : error LNK2001: 无法解析的外部符号 "public: static class sf::RenderStates const sf::RenderStates::Default" (?Default@RenderStates@sf@@2V12@B)
+D:\work\gameprogram\SFML_UNO\Release\uno.exe : fatal error LNK1120: 1 个无法解析的外部命令
